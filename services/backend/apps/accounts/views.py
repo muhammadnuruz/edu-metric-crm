@@ -1,3 +1,4 @@
+from django.db import models as db_models
 from rest_framework import viewsets, status, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -82,8 +83,5 @@ class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
         if user.role == "admin":
             return ActivityLog.objects.all()
         return ActivityLog.objects.filter(
-            models.Q(user=user) | models.Q(target_user=user)
+            db_models.Q(user=user) | db_models.Q(target_user=user)
         )
-
-
-from django.db import models  # noqa: E402 - needed for Q objects in get_queryset

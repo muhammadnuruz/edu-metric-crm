@@ -77,7 +77,7 @@ class AssignmentScore(models.Model):
         )
         self.total_assignments = Assignment.objects.filter(
             semester=self.semester,
-            subject__in=self.student.user.student_profile.group
+            subject__course=self.student.course,
         ).count() or 1
         self.completed_assignments = submissions.count()
 
@@ -85,7 +85,7 @@ class AssignmentScore(models.Model):
             from django.db.models import Avg
             avg = submissions.aggregate(avg=Avg("score"))["avg"] or 0
             self.average_quality_score = avg
-            self.score = round(min((avg / 100) * 15, 15), 2)
+            self.score = round(min((float(avg) / 100) * 15, 15), 2)
         else:
             self.score = 0
 
