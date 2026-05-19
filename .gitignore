@@ -15,4 +15,4 @@ out/
 *.log
 media/
 staticfiles/
-__pyache__/
+__pycache__/
