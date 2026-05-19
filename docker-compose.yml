@@ -1,0 +1,98 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: grant_management
+      POSTGRES_USER: grant_user
+      POSTGRES_PASSWORD: grant_pass_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U grant_user -d grant_management"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./services/backend
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/backend:/app
+    env_file:
+      - ./services/backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery:
+    build: ./services/backend
+    command: celery -A config worker -l info
+    volumes:
+      - ./services/backend:/app
+    env_file:
+      - ./services/backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery-beat:
+    build: ./services/backend
+    command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./services/backend:/app
+    env_file:
+      - ./services/backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  gateway:
+    build: ./services/gateway
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./services/gateway:/app
+    environment:
+      BACKEND_URL: http://backend:8000
+      REDIS_URL: redis://redis:6379/1
+    depends_on:
+      - backend
+      - redis
+
+  frontend:
+    build: ./services/frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api/v1
+    depends_on:
+      - gateway
+
+volumes:
+  pgdata:

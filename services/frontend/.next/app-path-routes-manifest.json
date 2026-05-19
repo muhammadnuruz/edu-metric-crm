@@ -1,0 +1,19 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/login/page": "/login",
+  "/rating/page": "/rating",
+  "/page": "/",
+  "/dashboard/attendance/page": "/dashboard/attendance",
+  "/dashboard/academic/page": "/dashboard/academic",
+  "/dashboard/activities/page": "/dashboard/activities",
+  "/dashboard/employment/page": "/dashboard/employment",
+  "/dashboard/discipline/page": "/dashboard/discipline",
+  "/dashboard/grants/page": "/dashboard/grants",
+  "/dashboard/assignments/page": "/dashboard/assignments",
+  "/dashboard/feedback/page": "/dashboard/feedback",
+  "/dashboard/students/page": "/dashboard/students",
+  "/dashboard/evaluations/page": "/dashboard/evaluations",
+  "/dashboard/page": "/dashboard",
+  "/dashboard/penalties/page": "/dashboard/penalties",
+  "/dashboard/recovery/page": "/dashboard/recovery"
+}

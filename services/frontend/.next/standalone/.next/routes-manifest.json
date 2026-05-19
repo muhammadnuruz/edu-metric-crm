@@ -1,0 +1,149 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [
+      {
+        "source": "/api/:path*",
+        "destination": "http://localhost:8080/api/v1/:path*",
+        "regex": "^/api(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      }
+    ],
+    "fallback": []
+  },
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/dashboard/academic",
+      "regex": "^/dashboard/academic(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/academic(?:/)?$"
+    },
+    {
+      "page": "/dashboard/activities",
+      "regex": "^/dashboard/activities(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/activities(?:/)?$"
+    },
+    {
+      "page": "/dashboard/assignments",
+      "regex": "^/dashboard/assignments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/assignments(?:/)?$"
+    },
+    {
+      "page": "/dashboard/attendance",
+      "regex": "^/dashboard/attendance(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/attendance(?:/)?$"
+    },
+    {
+      "page": "/dashboard/discipline",
+      "regex": "^/dashboard/discipline(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/discipline(?:/)?$"
+    },
+    {
+      "page": "/dashboard/employment",
+      "regex": "^/dashboard/employment(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/employment(?:/)?$"
+    },
+    {
+      "page": "/dashboard/evaluations",
+      "regex": "^/dashboard/evaluations(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/evaluations(?:/)?$"
+    },
+    {
+      "page": "/dashboard/feedback",
+      "regex": "^/dashboard/feedback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/feedback(?:/)?$"
+    },
+    {
+      "page": "/dashboard/grants",
+      "regex": "^/dashboard/grants(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/grants(?:/)?$"
+    },
+    {
+      "page": "/dashboard/penalties",
+      "regex": "^/dashboard/penalties(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/penalties(?:/)?$"
+    },
+    {
+      "page": "/dashboard/recovery",
+      "regex": "^/dashboard/recovery(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/recovery(?:/)?$"
+    },
+    {
+      "page": "/dashboard/students",
+      "regex": "^/dashboard/students(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/students(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/rating",
+      "regex": "^/rating(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/rating(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
