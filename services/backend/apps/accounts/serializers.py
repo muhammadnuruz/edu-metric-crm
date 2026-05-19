@@ -94,6 +94,37 @@ class ActivityLogSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at"]
 
 
+class PhoneLoginSerializer(serializers.Serializer):
+    phone = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        phone = attrs["phone"]
+        password = attrs["password"]
+        try:
+            user = User.objects.get(phone=phone)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Telefon raqami topilmadi")
+        if not user.check_password(password):
+            raise serializers.ValidationError("Parol noto'g'ri")
+        if not user.is_active:
+            raise serializers.ValidationError("Foydalanuvchi bloklangan")
+        attrs["user"] = user
+        return attrs
+
+
+class PNFLSearchSerializer(serializers.Serializer):
+    pnfl = serializers.CharField(max_length=14)
+
+
+class ChildInfoSerializer(serializers.ModelSerializer):
+    student_profile = StudentProfileSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "student_profile"]
+
+
 class UserMeSerializer(serializers.ModelSerializer):
     student_profile = StudentProfileSerializer(read_only=True)
 

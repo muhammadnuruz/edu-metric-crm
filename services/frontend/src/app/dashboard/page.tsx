@@ -232,6 +232,237 @@ function AdminDashboard() {
   );
 }
 
+function ParentDashboard() {
+  const [pnfl, setPnfl] = useState("");
+  const [children, setChildren] = useState<Array<{
+    id: number;
+    first_name: string;
+    last_name: string;
+    student_profile: {
+      student_id: string;
+      group: string;
+      course: number;
+      status: string;
+      grant_status: string;
+    } | null;
+  }>>([]);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+
+  useEffect(() => {
+    api.get<typeof children>("/auth/children/?pnfl=")
+      .then(setChildren)
+      .catch(() => {});
+  }, []);
+
+  const handleSearch = async () => {
+    if (!pnfl.trim()) return;
+    setLoading(true);
+    try {
+      const data = await api.searchChildByPNFL(pnfl);
+      setChildren(data as typeof children);
+      setSearched(true);
+    } catch {
+      setChildren([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <h1 className="mb-6 text-2xl font-bold">Ota-ona paneli</h1>
+
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-lg">Farzand ma&apos;lumotlarini qidirish</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={pnfl}
+              onChange={(e) => setPnfl(e.target.value)}
+              placeholder="PNFL (JSHSHIR) raqamini kiriting..."
+              className="flex h-10 flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              maxLength={14}
+            />
+            <button
+              onClick={handleSearch}
+              disabled={loading || !pnfl.trim()}
+              className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 disabled:opacity-50"
+            >
+              {loading ? "Qidirilmoqda..." : "Qidirish"}
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Farzandingiz PNFL (Jismoniy shaxslarning shaxsiy identifikatsiya raqami) orqali barcha ma&apos;lumotlarni ko&apos;rishingiz mumkin
+          </p>
+        </CardContent>
+      </Card>
+
+      {children.length > 0 ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {children.map((child) => (
+            <Card key={child.id}>
+              <CardContent className="p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
+                    {child.first_name[0]}{child.last_name[0]}
+                  </div>
+                  <div>
+                    <p className="font-semibold">{child.first_name} {child.last_name}</p>
+                    {child.student_profile && (
+                      <p className="text-sm text-muted-foreground">
+                        {child.student_profile.group} | {child.student_profile.course}-kurs
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {child.student_profile && (
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Talaba ID</span>
+                      <span className="font-medium">{child.student_profile.student_id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Holat</span>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                        child.student_profile.status === "grant" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"
+                      }`}>
+                        {child.student_profile.status === "grant" ? "Grant" : "Kontrakt"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Grant holati</span>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                        child.student_profile.grant_status === "active" ? "bg-green-100 text-green-700" :
+                        child.student_profile.grant_status === "suspended" ? "bg-yellow-100 text-yellow-700" :
+                        "bg-red-100 text-red-700"
+                      }`}>
+                        {child.student_profile.grant_status === "active" ? "Faol" :
+                         child.student_profile.grant_status === "suspended" ? "To'xtatilgan" : "Bekor"}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <div className="mt-4 flex gap-2">
+                  <a
+                    href="/dashboard/academic"
+                    className="flex-1 rounded-md border px-3 py-2 text-center text-xs font-medium transition-colors hover:bg-muted"
+                  >
+                    Akademik
+                  </a>
+                  <a
+                    href="/dashboard/attendance"
+                    className="flex-1 rounded-md border px-3 py-2 text-center text-xs font-medium transition-colors hover:bg-muted"
+                  >
+                    Davomat
+                  </a>
+                  <a
+                    href="/dashboard/grants"
+                    className="flex-1 rounded-md border px-3 py-2 text-center text-xs font-medium transition-colors hover:bg-muted"
+                  >
+                    Grant reyting
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : searched ? (
+        <Card>
+          <CardContent className="p-12 text-center text-muted-foreground">
+            Ushbu PNFL bo&apos;yicha talaba topilmadi
+          </CardContent>
+        </Card>
+      ) : null}
+    </div>
+  );
+}
+
+function StaffDashboard() {
+  return (
+    <div>
+      <h1 className="mb-6 text-2xl font-bold">Xodim paneli</h1>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Tezkor harakatlar</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <a href="/dashboard/evaluations" className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted">
+              <Award className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-medium">Talabalarni baholash</p>
+                <p className="text-xs text-muted-foreground">Ijtimoiy faollik, intizom bahosi</p>
+              </div>
+            </a>
+            <a href="/dashboard/penalties" className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted">
+              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <div>
+                <p className="font-medium">Jarima berish</p>
+                <p className="text-xs text-muted-foreground">Tartib buzganlar uchun</p>
+              </div>
+            </a>
+            <a href="/dashboard/recovery" className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted">
+              <TrendingUp className="h-5 w-5 text-green-500" />
+              <div>
+                <p className="font-medium">Tiklanish vazifalari</p>
+                <p className="text-xs text-muted-foreground">50% jarima qaytarish</p>
+              </div>
+            </a>
+            <a href="/dashboard/discipline" className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted">
+              <Shield className="h-5 w-5 text-indigo-500" />
+              <div>
+                <p className="font-medium">Intizom yozuvlari</p>
+                <p className="text-xs text-muted-foreground">Korporativ madaniyat</p>
+              </div>
+            </a>
+            <a href="/dashboard/students" className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted">
+              <Users className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-medium">Talabalar ro&apos;yxati</p>
+                <p className="text-xs text-muted-foreground">Barcha talabalar</p>
+              </div>
+            </a>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Ball tizimi</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[
+                { label: "Akademik natija", max: 40, color: "bg-blue-500" },
+                { label: "Davomat", max: 20, color: "bg-green-500" },
+                { label: "Topshiriqlar", max: 15, color: "bg-purple-500" },
+                { label: "Faollik va Sertifikatlar", max: 10, color: "bg-orange-500" },
+                { label: "Tyutor bahosi", max: 5, color: "bg-teal-500" },
+                { label: "Intizom", max: 10, color: "bg-indigo-500" },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center gap-3">
+                  <div className={`h-3 w-3 rounded-full ${item.color}`} />
+                  <span className="flex-1 text-sm">{item.label}</span>
+                  <span className="text-sm font-medium">{item.max} ball</span>
+                </div>
+              ))}
+              <div className="border-t pt-2">
+                <div className="flex justify-between text-sm font-semibold">
+                  <span>Jami</span>
+                  <span>100 ball</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [role, setRole] = useState<string | null>(null);
 
@@ -243,5 +474,7 @@ export default function DashboardPage() {
   if (!role) return null;
 
   if (role === "admin") return <AdminDashboard />;
+  if (role === "parent") return <ParentDashboard />;
+  if (role === "tutor" || role === "komendant" || role === "manager") return <StaffDashboard />;
   return <StudentDashboard />;
 }

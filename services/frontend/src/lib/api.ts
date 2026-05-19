@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://10.30.1.219:8080/api/v1";
 
 interface TokenPair {
   access: string;
@@ -63,6 +63,28 @@ class ApiClient {
     }
 
     return res.json();
+  }
+
+  async phoneLogin(phone: string, password: string): Promise<TokenPair> {
+    const res = await fetch(`${this.baseUrl}/auth/phone-login/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone, password }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || err.non_field_errors?.[0] || "Telefon raqami yoki parol noto'g'ri");
+    }
+
+    const data = await res.json();
+    localStorage.setItem("access_token", data.access);
+    localStorage.setItem("refresh_token", data.refresh);
+    return data;
+  }
+
+  async searchChildByPNFL(pnfl: string) {
+    return this.get<Array<{ id: number; first_name: string; last_name: string; student_profile: unknown }>>(`/auth/children/?pnfl=${pnfl}`);
   }
 
   async login(username: string, password: string): Promise<TokenPair> {

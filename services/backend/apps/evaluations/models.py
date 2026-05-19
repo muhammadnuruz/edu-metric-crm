@@ -10,7 +10,7 @@ class TutorEvaluation(models.Model):
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="tutor_evaluations")
     evaluator = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="given_evaluations",
-        limit_choices_to={"role": "tutor"},
+        limit_choices_to={"role__in": ["tutor", "komendant", "manager"]},
     )
     corporate_culture = models.DecimalField(
         max_digits=3, decimal_places=1, validators=[MinValueValidator(0), MaxValueValidator(1)],

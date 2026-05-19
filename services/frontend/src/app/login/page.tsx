@@ -7,7 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function LoginPage() {
   const router = useRouter();
+  const [tab, setTab] = useState<"login" | "phone">("login");
   const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,7 +19,11 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await api.login(username, password);
+      if (tab === "phone") {
+        await api.phoneLogin(phone, password);
+      } else {
+        await api.login(username, password);
+      }
       router.push("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Xatolik yuz berdi");
@@ -37,26 +43,66 @@ export default function LoginPage() {
           <CardDescription>PDP University Grant Management System</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="mb-4 flex rounded-lg bg-muted p-1">
+            <button
+              type="button"
+              onClick={() => { setTab("login"); setError(""); }}
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                tab === "login" ? "bg-white shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              onClick={() => { setTab("phone"); setError(""); }}
+              className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                tab === "phone" ? "bg-white shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Telefon raqam
+            </button>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
                 {error}
               </div>
             )}
-            <div className="space-y-2">
-              <label htmlFor="username" className="text-sm font-medium">
-                Login
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                placeholder="Foydalanuvchi nomi"
-                required
-              />
-            </div>
+
+            {tab === "login" ? (
+              <div className="space-y-2">
+                <label htmlFor="username" className="text-sm font-medium">
+                  Login
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  placeholder="Foydalanuvchi nomi"
+                  required
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <label htmlFor="phone" className="text-sm font-medium">
+                  Telefon raqam
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  placeholder="+998 90 123 45 67"
+                  required
+                />
+              </div>
+            )}
+
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
                 Parol
@@ -78,6 +124,13 @@ export default function LoginPage() {
             >
               {loading ? "Kirish..." : "Kirish"}
             </button>
+
+            {tab === "phone" && (
+              <p className="text-center text-xs text-muted-foreground">
+                Ota-onalar uchun telefon raqam orqali kirish
+              </p>
+            )}
+
             <div className="text-center">
               <a href="/rating" className="text-sm text-primary hover:underline">
                 Ochiq reytingni ko'rish

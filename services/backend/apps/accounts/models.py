@@ -7,6 +7,8 @@ class User(AbstractUser):
         ADMIN = "admin", "Admin"
         TEACHER = "teacher", "Teacher/Mentor"
         TUTOR = "tutor", "Tutor"
+        KOMENDANT = "komendant", "Komendant"
+        MANAGER = "manager", "Unicron Manager"
         PARENT = "parent", "Parent"
         STUDENT = "student", "Student"
 
@@ -40,8 +42,20 @@ class User(AbstractUser):
         return self.role == self.Role.PARENT
 
     @property
+    def is_komendant(self) -> bool:
+        return self.role == self.Role.KOMENDANT
+
+    @property
+    def is_manager(self) -> bool:
+        return self.role == self.Role.MANAGER
+
+    @property
     def is_student_role(self) -> bool:
         return self.role == self.Role.STUDENT
+
+    @property
+    def is_staff_role(self) -> bool:
+        return self.role in (self.Role.TUTOR, self.Role.KOMENDANT, self.Role.MANAGER)
 
 
 class StudentProfile(models.Model):

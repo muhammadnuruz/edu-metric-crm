@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from apps.accounts.permissions import IsAdmin, IsAdminOrTeacher
+from apps.accounts.permissions import IsAdmin, IsAdminOrTeacher, IsAdminOrStaff
 from .models import Penalty, Recovery, PenaltySummary
 from .serializers import PenaltySerializer, RecoverySerializer, PenaltySummarySerializer
 
@@ -17,7 +17,7 @@ class PenaltyViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ("list", "retrieve"):
             return [IsAuthenticated()]
-        return [IsAdminOrTeacher()]
+        return [IsAdminOrStaff()]
 
     def perform_create(self, serializer):
         penalty = serializer.save(issued_by=self.request.user)
@@ -44,12 +44,12 @@ class RecoveryViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ("list", "retrieve"):
             return [IsAuthenticated()]
-        return [IsAdminOrTeacher()]
+        return [IsAdminOrStaff()]
 
     def perform_create(self, serializer):
         serializer.save(assigned_by=self.request.user)
 
-    @action(detail=True, methods=["post"], permission_classes=[IsAdminOrTeacher])
+    @action(detail=True, methods=["post"], permission_classes=[IsAdminOrStaff])
     def complete(self, request, pk=None):
         recovery = self.get_object()
         recovery.status = Recovery.Status.COMPLETED

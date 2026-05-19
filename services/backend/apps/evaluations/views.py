@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from apps.accounts.permissions import IsAdmin, IsTutor, IsTeacher, IsAdminOrReadOnly
+from apps.accounts.permissions import IsAdmin, IsTutor, IsTeacher, IsAdminOrReadOnly, IsStaff, IsAdminOrStaff
 from .models import TutorEvaluation, MentorFeedback, DisciplineRecord
 from .serializers import (
     TutorEvaluationSerializer, MentorFeedbackSerializer, DisciplineRecordSerializer,
@@ -15,7 +15,7 @@ class TutorEvaluationViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ("create", "update", "partial_update"):
-            return [IsTutor()]
+            return [IsStaff()]
         if self.action in ("list", "retrieve"):
             return [IsAuthenticated()]
         return [IsAdmin()]
@@ -26,7 +26,7 @@ class TutorEvaluationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         qs = super().get_queryset()
-        if user.role == "tutor":
+        if user.role in ("tutor", "komendant", "manager"):
             return qs.filter(evaluator=user)
         if user.role == "student":
             return qs.filter(student__user=user)
@@ -70,7 +70,7 @@ class DisciplineRecordViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ("list", "retrieve"):
             return [IsAuthenticated()]
-        return [IsAdmin()]
+        return [IsAdminOrStaff()]
 
     def perform_create(self, serializer):
         serializer.save(recorded_by=self.request.user)

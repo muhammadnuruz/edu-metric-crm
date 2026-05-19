@@ -26,6 +26,26 @@ class IsParent(BasePermission):
         return request.user.is_authenticated and request.user.role == "parent"
 
 
+class IsKomendant(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == "komendant"
+
+
+class IsManager(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == "manager"
+
+
+class IsStaff(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in ("tutor", "komendant", "manager")
+
+
+class IsAdminOrStaff(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in ("admin", "tutor", "komendant", "manager")
+
+
 class IsAdminOrTeacher(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role in ("admin", "teacher")

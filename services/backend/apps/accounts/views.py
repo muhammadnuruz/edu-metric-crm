@@ -7,16 +7,54 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import User, StudentProfile, ActivityLog
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .serializers import (
     UserSerializer, UserCreateSerializer, StudentProfileSerializer,
     StudentProfileCreateSerializer, ActivityLogSerializer,
     UserMeSerializer, CustomTokenObtainPairSerializer,
+    PhoneLoginSerializer, ChildInfoSerializer,
 )
-from .permissions import IsAdmin, IsAdminOrReadOnly
+from .permissions import IsAdmin, IsAdminOrReadOnly, IsParent
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class PhoneLoginView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PhoneLoginSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        refresh = RefreshToken.for_user(user)
+        refresh["role"] = user.role
+        refresh["full_name"] = user.get_full_name()
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+        })
+
+
+class ChildByPNFLView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        pnfl = request.query_params.get("pnfl", "")
+        if not pnfl:
+            return Response({"detail": "PNFL kiritilmagan"}, status=status.HTTP_400_BAD_REQUEST)
+        children = User.objects.filter(
+            pnfl=pnfl, role=User.Role.STUDENT
+        ).select_related("student_profile")
+        if not children.exists():
+            children = User.objects.filter(
+                student_profile__parent=request.user, role=User.Role.STUDENT
+            ).select_related("student_profile")
+        serializer = ChildInfoSerializer(children, many=True)
+        return Response(serializer.data)
 
 
 class UserViewSet(viewsets.ModelViewSet):
