@@ -20,17 +20,17 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Bosh sahifa", href: "/dashboard", icon: <LayoutDashboard className="h-4 w-4" />, roles: ["admin", "teacher", "tutor", "komendant", "manager", "parent", "student"] },
   { label: "Talabalar", href: "/dashboard/students", icon: <Users className="h-4 w-4" />, roles: ["admin", "teacher", "tutor", "komendant", "manager"] },
-  { label: "Akademik", href: "/dashboard/academic", icon: <GraduationCap className="h-4 w-4" />, roles: ["admin", "teacher", "student", "parent"] },
-  { label: "Davomat", href: "/dashboard/attendance", icon: <Calendar className="h-4 w-4" />, roles: ["admin", "teacher", "student", "parent"] },
-  { label: "Topshiriqlar", href: "/dashboard/assignments", icon: <FileText className="h-4 w-4" />, roles: ["admin", "teacher", "student", "parent"] },
-  { label: "Faoliyat", href: "/dashboard/activities", icon: <Award className="h-4 w-4" />, roles: ["admin", "student", "parent"] },
-  { label: "Baholash", href: "/dashboard/evaluations", icon: <ClipboardCheck className="h-4 w-4" />, roles: ["admin", "tutor", "komendant", "manager", "teacher", "student"] },
-  { label: "Jarimalar", href: "/dashboard/penalties", icon: <AlertTriangle className="h-4 w-4" />, roles: ["admin", "teacher", "tutor", "komendant", "manager", "student"] },
-  { label: "Tiklanish", href: "/dashboard/recovery", icon: <RefreshCw className="h-4 w-4" />, roles: ["admin", "teacher", "tutor", "komendant", "manager", "student"] },
-  { label: "Bandlik", href: "/dashboard/employment", icon: <Briefcase className="h-4 w-4" />, roles: ["admin", "student"] },
-  { label: "Grant reyting", href: "/dashboard/grants", icon: <BarChart3 className="h-4 w-4" />, roles: ["admin", "teacher", "tutor", "komendant", "manager", "parent", "student"] },
-  { label: "Intizom", href: "/dashboard/discipline", icon: <Shield className="h-4 w-4" />, roles: ["admin", "tutor", "komendant"] },
-  { label: "Fikr-mulohaza", href: "/dashboard/feedback", icon: <MessageSquare className="h-4 w-4" />, roles: ["admin", "teacher", "student"] },
+  { label: "Akademik", href: "/dashboard/academic", icon: <GraduationCap className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "student", "parent"] },
+  { label: "Davomat", href: "/dashboard/attendance", icon: <Calendar className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "student", "parent"] },
+  { label: "Topshiriqlar", href: "/dashboard/assignments", icon: <FileText className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "student", "parent"] },
+  { label: "Faoliyat", href: "/dashboard/activities", icon: <Award className="h-4 w-4" />, roles: ["admin", "manager", "student", "parent"] },
+  { label: "Baholash", href: "/dashboard/evaluations", icon: <ClipboardCheck className="h-4 w-4" />, roles: ["admin", "manager", "tutor", "komendant", "teacher", "student"] },
+  { label: "Jarimalar", href: "/dashboard/penalties", icon: <AlertTriangle className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "tutor", "komendant", "student"] },
+  { label: "Tiklanish", href: "/dashboard/recovery", icon: <RefreshCw className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "tutor", "komendant", "student"] },
+  { label: "Bandlik", href: "/dashboard/employment", icon: <Briefcase className="h-4 w-4" />, roles: ["admin", "manager", "student"] },
+  { label: "Grant reyting", href: "/dashboard/grants", icon: <BarChart3 className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "tutor", "komendant", "parent", "student"] },
+  { label: "Intizom", href: "/dashboard/discipline", icon: <Shield className="h-4 w-4" />, roles: ["admin", "manager", "tutor", "komendant"] },
+  { label: "Fikr-mulohaza", href: "/dashboard/feedback", icon: <MessageSquare className="h-4 w-4" />, roles: ["admin", "manager", "teacher", "student"] },
 ];
 
 export function Sidebar({ role, fullName }: { role: string; fullName: string }) {

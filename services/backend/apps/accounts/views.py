@@ -39,20 +39,14 @@ class PhoneLoginView(generics.GenericAPIView):
         })
 
 
-class ChildByPNFLView(generics.GenericAPIView):
+class MyChildrenView(generics.GenericAPIView):
+    """Parent telefon orqali kirganda farzandlari avtomatik keladi"""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        pnfl = request.query_params.get("pnfl", "")
-        if not pnfl:
-            return Response({"detail": "PNFL kiritilmagan"}, status=status.HTTP_400_BAD_REQUEST)
         children = User.objects.filter(
-            pnfl=pnfl, role=User.Role.STUDENT
+            student_profile__parent=request.user, role=User.Role.STUDENT
         ).select_related("student_profile")
-        if not children.exists():
-            children = User.objects.filter(
-                student_profile__parent=request.user, role=User.Role.STUDENT
-            ).select_related("student_profile")
         serializer = ChildInfoSerializer(children, many=True)
         return Response(serializer.data)
 
@@ -118,7 +112,7 @@ class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == "admin":
+        if user.role in ("admin", "manager"):
             return ActivityLog.objects.all()
         return ActivityLog.objects.filter(
             db_models.Q(user=user) | db_models.Q(target_user=user)

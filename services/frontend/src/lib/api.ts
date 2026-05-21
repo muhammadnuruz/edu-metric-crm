@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://10.30.1.219:8080/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://10.50.2.39:8080/api/v1";
 
 interface TokenPair {
   access: string;
@@ -83,8 +83,8 @@ class ApiClient {
     return data;
   }
 
-  async searchChildByPNFL(pnfl: string) {
-    return this.get<Array<{ id: number; first_name: string; last_name: string; student_profile: unknown }>>(`/auth/children/?pnfl=${pnfl}`);
+  async getMyChildren() {
+    return this.get<Array<{ id: number; first_name: string; last_name: string; student_profile: Record<string, unknown> | null }>>("/auth/my-children/");
   }
 
   async login(username: string, password: string): Promise<TokenPair> {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://10.30.1.219:8080/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://10.50.2.39:8080/api/v1";
 
 interface PublicScore {
   rank: number;
