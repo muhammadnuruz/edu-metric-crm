@@ -33,12 +33,13 @@ export default function AssignmentsPage() {
   const isTeacher = user?.role === "teacher" || user?.role === "admin";
 
   useEffect(() => {
-    const params = filter ? `?status=${filter}` : "";
-    api.get<{ results: AssignmentSubmission[] }>(`/assignments/submissions/${params}`)
+    api.get<{ results: AssignmentSubmission[] }>("/assignments/submissions/?page_size=100")
       .then((data) => setSubmissions(data.results || []))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [filter]);
+  }, []);
+
+  const filtered = submissions.filter((s) => !filter || s.status === filter);
 
   const statusColors: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-700",
@@ -96,7 +97,7 @@ export default function AssignmentsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {submissions.map((s) => (
+                  {filtered.map((s) => (
                     <tr key={s.id} className="border-b transition-colors hover:bg-muted/30">
                       <td className="px-4 py-3 font-medium">{s.student_name}</td>
                       <td className="px-4 py-3">{s.assignment_title}</td>

@@ -10,13 +10,10 @@ interface DisciplineRecord {
   student_name: string;
   semester_name: string;
   academic_honesty: number;
-  dress_code: number;
-  punctuality: number;
-  respect: number;
-  property_care: number;
   total_score: number;
   evaluated_by_name: string;
   created_at: string;
+  note: string;
 }
 
 export default function DisciplinePage() {
@@ -29,11 +26,9 @@ export default function DisciplinePage() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     student: "",
-    academic_honesty: 2,
-    dress_code: 2,
-    punctuality: 2,
-    respect: 2,
-    property_care: 2,
+    semester: 1,
+    academic_honesty: 10,
+    note: "",
   });
 
   useEffect(() => {
@@ -48,7 +43,7 @@ export default function DisciplinePage() {
     try {
       await api.post("/evaluations/discipline/", { ...formData, student: Number(formData.student) });
       setShowForm(false);
-      setFormData({ student: "", academic_honesty: 2, dress_code: 2, punctuality: 2, respect: 2, property_care: 2 });
+      setFormData({ student: "", semester: 1, academic_honesty: 10, note: "" });
       const data = await api.get<{ results: DisciplineRecord[] }>("/evaluations/discipline/?page_size=100");
       setRecords(data.results || []);
     } catch {}
@@ -95,25 +90,38 @@ export default function DisciplinePage() {
                   required
                 />
               </div>
-              {([
-                ["academic_honesty", "Akademik halollik", 2],
-                ["dress_code", "Kiyim qoidasi", 2],
-                ["punctuality", "Punktuallik", 2],
-                ["respect", "Hurmat", 2],
-                ["property_care", "Mol-mulk", 2],
-              ] as const).map(([field, label, max]) => (
-                <div key={field}>
-                  <label className="mb-1 block text-sm font-medium">{label} (0-{max})</label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={max}
-                    value={formData[field]}
-                    onChange={(e) => setFormData({ ...formData, [field]: Number(e.target.value) })}
-                    className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
-                  />
-                </div>
-              ))}
+              <div>
+                <label className="mb-1 block text-sm font-medium">Semestr ID</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={formData.semester}
+                  onChange={(e) => setFormData({ ...formData, semester: Number(e.target.value) })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Intizom balli (0-10)</label>
+                <input
+                  type="number"
+                  min={0}
+                  max={10}
+                  step={0.5}
+                  value={formData.academic_honesty}
+                  onChange={(e) => setFormData({ ...formData, academic_honesty: Number(e.target.value) })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="mb-1 block text-sm font-medium">Izoh</label>
+                <input
+                  type="text"
+                  value={formData.note}
+                  onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                />
+              </div>
               <div className="flex items-end">
                 <button type="submit" className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary/90">
                   Saqlash
@@ -144,12 +152,9 @@ export default function DisciplinePage() {
                 <thead>
                   <tr className="border-b bg-muted/50">
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Talaba</th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Halollik<br/><span className="text-[10px]">/2</span></th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Kiyim<br/><span className="text-[10px]">/2</span></th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Punktuallik<br/><span className="text-[10px]">/2</span></th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Hurmat<br/><span className="text-[10px]">/2</span></th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Mol-mulk<br/><span className="text-[10px]">/2</span></th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Jami</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Semestr</th>
+                    <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Ball</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Izoh</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Baholagan</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Sana</th>
                   </tr>
@@ -158,12 +163,9 @@ export default function DisciplinePage() {
                   {filtered.map((r) => (
                     <tr key={r.id} className="border-b transition-colors hover:bg-muted/30">
                       <td className="px-4 py-3 font-medium">{r.student_name}</td>
-                      <td className={`px-4 py-3 text-center font-medium ${scoreColor(r.academic_honesty, 2)}`}>{r.academic_honesty}</td>
-                      <td className={`px-4 py-3 text-center font-medium ${scoreColor(r.dress_code, 2)}`}>{r.dress_code}</td>
-                      <td className={`px-4 py-3 text-center font-medium ${scoreColor(r.punctuality, 2)}`}>{r.punctuality}</td>
-                      <td className={`px-4 py-3 text-center font-medium ${scoreColor(r.respect, 2)}`}>{r.respect}</td>
-                      <td className={`px-4 py-3 text-center font-medium ${scoreColor(r.property_care, 2)}`}>{r.property_care}</td>
-                      <td className="px-4 py-3 text-center font-bold">{r.total_score}/10</td>
+                      <td className="px-4 py-3 text-muted-foreground">{r.semester_name}</td>
+                      <td className={`px-4 py-3 text-center font-bold ${scoreColor(r.total_score, 10)}`}>{r.total_score}/10</td>
+                      <td className="px-4 py-3 text-muted-foreground">{r.note}</td>
                       <td className="px-4 py-3 text-muted-foreground">{r.evaluated_by_name}</td>
                       <td className="px-4 py-3 text-muted-foreground">{new Date(r.created_at).toLocaleDateString("uz")}</td>
                     </tr>

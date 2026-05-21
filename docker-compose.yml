@@ -87,15 +87,17 @@ services:
     build:
       context: ./services/frontend
       dockerfile: Dockerfile.dev
+    command: npm run dev -- -p 3005 -H 0.0.0.0
     ports:
-      - "3000:3000"
+      - "3005:3005"
     volumes:
       - ./services/frontend/src:/app/src
       - ./services/frontend/public:/app/public
     environment:
-      NEXT_PUBLIC_API_URL: http://10.50.2.39:8080/api/v1
+      NEXT_PUBLIC_API_URL: http://api.shahzod.app/api/v1
     depends_on:
       - gateway
+
 
 volumes:
   pgdata:

@@ -21,7 +21,7 @@ export default function RecoveryPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const user = getUserFromToken();
-  const isAdmin = user?.role === "admin";
+  const canApprove = user?.role === "admin" || user?.role === "manager";
   const isStudent = user?.role === "student";
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function RecoveryPage() {
 
   const loadRecoveries = () => {
     const params = filter ? `?status=${filter}` : "";
-    api.get<{ results: Recovery[] }>(`/penalties/recoveries/${params}`)
+    api.get<{ results: Recovery[] }>(`/penalties/recovery/${params}`)
       .then((data) => setRecoveries(data.results || []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -38,7 +38,7 @@ export default function RecoveryPage() {
 
   const handleComplete = async (id: number) => {
     try {
-      await api.post(`/penalties/recoveries/${id}/complete/`, {});
+      await api.post(`/penalties/recovery/${id}/complete/`, {});
       loadRecoveries();
     } catch {}
   };
@@ -107,7 +107,7 @@ export default function RecoveryPage() {
                     Bajarildi deb belgilash
                   </button>
                 )}
-                {isAdmin && r.status === "in_progress" && (
+                {canApprove && r.status === "in_progress" && (
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={() => handleComplete(r.id)}

@@ -39,7 +39,7 @@ export default function ActivitiesPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const user = getUserFromToken();
-  const isAdmin = user?.role === "admin";
+  const canApprove = user?.role === "admin" || user?.role === "manager";
   const isStudent = user?.role === "student";
 
   const [showForm, setShowForm] = useState(false);
@@ -201,7 +201,7 @@ export default function ActivitiesPage() {
                   <span className="text-sm font-bold">{a.score}/{a.max_category_score} ball</span>
                   <span className="text-xs text-muted-foreground">{new Date(a.created_at).toLocaleDateString("uz")}</span>
                 </div>
-                {isAdmin && a.status === "pending" && (
+                {canApprove && a.status === "pending" && (
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={() => handleVerify(a.id, "approve", a.max_category_score)}

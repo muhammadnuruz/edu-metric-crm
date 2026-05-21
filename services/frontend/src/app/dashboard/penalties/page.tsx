@@ -29,33 +29,41 @@ const severityColors: Record<string, string> = {
 };
 
 const categoryLabels: Record<string, string> = {
-  late_submission: "Kechikib topshirish",
-  absence: "Sababsiz kelmagan",
-  misconduct: "Noto'g'ri xulq",
+  late: "Kechikish",
+  phone: "Telefon ishlatish",
+  dormitory: "Yotoqxona qoidalari",
+  absent: "Sababsiz dars qoldirish",
+  ignore_warning: "Ogohlantirishni e'tiborsiz qoldirish",
+  rule_violation: "Tartib qoidalarini buzish",
+  systematic_absent: "Tizimli dars qoldirish",
+  discipline_issue: "Intizomiy muammolar",
   cheating: "Ko'chirish",
-  plagiarism: "Plagiat",
-  dress_code: "Kiyim qoidasi",
-  property_damage: "Mol-mulk buzish",
-  disrespect: "Hurmatni saqlmaslik",
-  other: "Boshqa",
+};
+
+const severityPoints: Record<string, number> = {
+  light: -1,
+  medium: -3,
+  heavy: -5,
 };
 
 export default function PenaltiesPage() {
   const [penalties, setPenalties] = useState<Penalty[]>([]);
   const [loading, setLoading] = useState(true);
   const user = getUserFromToken();
-  const isAdmin = user?.role === "admin";
+  const canGivePenalty = ["admin", "manager", "teacher", "tutor", "komendant"].includes(user?.role || "");
 
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     student: "",
-    category: "late_submission",
+    semester: 1,
+    category: "late",
     severity: "light",
+    points: -1,
     description: "",
   });
 
   useEffect(() => {
-    api.get<{ results: Penalty[] }>("/penalties/penalties/?page_size=100")
+    api.get<{ results: Penalty[] }>("/penalties/items/?page_size=100")
       .then((data) => setPenalties(data.results || []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -64,10 +72,10 @@ export default function PenaltiesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post("/penalties/penalties/", { ...formData, student: Number(formData.student) });
+      await api.post("/penalties/items/", { ...formData, student: Number(formData.student) });
       setShowForm(false);
-      setFormData({ student: "", category: "late_submission", severity: "light", description: "" });
-      const data = await api.get<{ results: Penalty[] }>("/penalties/penalties/?page_size=100");
+      setFormData({ student: "", semester: 1, category: "late", severity: "light", points: -1, description: "" });
+      const data = await api.get<{ results: Penalty[] }>("/penalties/items/?page_size=100");
       setPenalties(data.results || []);
     } catch {}
   };
@@ -81,7 +89,7 @@ export default function PenaltiesPage() {
           <h1 className="text-2xl font-bold">Jarimalar</h1>
           <p className="text-sm text-muted-foreground">Intizomiy jarimalar (max -20 ball)</p>
         </div>
-        {isAdmin && (
+        {canGivePenalty && (
           <button
             onClick={() => setShowForm(!showForm)}
             className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
@@ -107,6 +115,17 @@ export default function PenaltiesPage() {
                 />
               </div>
               <div>
+                <label className="mb-1 block text-sm font-medium">Semestr ID</label>
+                <input
+                  type="number"
+                  value={formData.semester}
+                  onChange={(e) => setFormData({ ...formData, semester: Number(e.target.value) })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                  min={1}
+                  required
+                />
+              </div>
+              <div>
                 <label className="mb-1 block text-sm font-medium">Kategoriya</label>
                 <select
                   value={formData.category}
@@ -122,13 +141,26 @@ export default function PenaltiesPage() {
                 <label className="mb-1 block text-sm font-medium">Darajasi</label>
                 <select
                   value={formData.severity}
-                  onChange={(e) => setFormData({ ...formData, severity: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, severity: e.target.value, points: severityPoints[e.target.value] })}
                   className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
                 >
                   {Object.entries(severityLabels).map(([k, v]) => (
                     <option key={k} value={k}>{v}</option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Ball (-20 dan 0 gacha)</label>
+                <input
+                  type="number"
+                  min={-20}
+                  max={0}
+                  step={0.5}
+                  value={formData.points}
+                  onChange={(e) => setFormData({ ...formData, points: Number(e.target.value) })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                  required
+                />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">Tavsif</label>
@@ -178,7 +210,7 @@ export default function PenaltiesPage() {
                           {severityLabels[p.severity]}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-center font-bold text-red-600">-{p.points_deducted}</td>
+                      <td className="px-4 py-3 text-center font-bold text-red-600">{p.points_deducted}</td>
                       <td className="px-4 py-3 text-muted-foreground">{p.description}</td>
                       <td className="px-4 py-3 text-muted-foreground">{p.issued_by_name}</td>
                       <td className="px-4 py-3 text-muted-foreground">{new Date(p.created_at).toLocaleDateString("uz")}</td>

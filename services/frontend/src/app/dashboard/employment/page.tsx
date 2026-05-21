@@ -35,10 +35,11 @@ export default function EmploymentPage() {
   const [loading, setLoading] = useState(true);
   const user = getUserFromToken();
   const isStudent = user?.role === "student";
-  const isAdmin = user?.role === "admin";
+  const canApprove = user?.role === "admin" || user?.role === "manager";
 
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
+    semester: 1,
     employment_type: "internship",
     company_name: "",
     position: "",
@@ -62,14 +63,14 @@ export default function EmploymentPage() {
     try {
       await api.post("/grants/employment/", formData);
       setShowForm(false);
-      setFormData({ employment_type: "internship", company_name: "", position: "", start_date: "", proof_url: "" });
+      setFormData({ semester: 1, employment_type: "internship", company_name: "", position: "", start_date: "", proof_url: "" });
       loadRecords();
     } catch {}
   };
 
   const handleVerify = async (id: number) => {
     try {
-      await api.post(`/grants/employment/${id}/verify/`, {});
+      await api.post(`/grants/employment/${id}/verify/`, { action: "approve", score: 5 });
       loadRecords();
     } catch {}
   };
@@ -107,6 +108,17 @@ export default function EmploymentPage() {
                     <option key={k} value={k}>{v} — {typeScores[k]}</option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Semestr ID</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={formData.semester}
+                  onChange={(e) => setFormData({ ...formData, semester: Number(e.target.value) })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                  required
+                />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">Kompaniya</label>
@@ -185,7 +197,7 @@ export default function EmploymentPage() {
                     Tasdiq havolasi
                   </a>
                 )}
-                {isAdmin && !r.verified && (
+                {canApprove && !r.verified && (
                   <button
                     onClick={() => handleVerify(r.id)}
                     className="mt-3 w-full rounded bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700"

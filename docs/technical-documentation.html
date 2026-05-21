@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduMetric CRM – Texnik Dokumentatsiya</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --bg: #0a0e1a;
+      --bg2: #0f1525;
+      --bg3: #151c30;
+      --card: #1a2235;
+      --card2: #1e2840;
+      --border: #2a3550;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent3: #06b6d4;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --orange: #f97316;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --code-bg: #0d1117;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 100;
+      padding: 0 0 40px;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #1a2235 0%, #1e2840 100%);
+    }
+    .sidebar-logo h1 {
+      font-size: 17px; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .sidebar-logo p { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+    .sidebar-nav { padding: 16px 12px; }
+    .nav-section { margin-bottom: 8px; }
+    .nav-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+      color: var(--text3); text-transform: uppercase;
+      padding: 8px 8px 4px;
+    }
+    .nav-item {
+      display: block; padding: 7px 12px;
+      border-radius: 7px; text-decoration: none;
+      color: var(--text2); font-size: 13px;
+      transition: all 0.2s; margin-bottom: 1px;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(79,142,247,0.12);
+      color: var(--accent);
+    }
+    .nav-item .dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; margin-right: 8px; vertical-align: middle;
+    }
+
+    /* MAIN */
+    .main { margin-left: 260px; padding: 40px 48px; max-width: 1100px; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a2235 0%, #1e2840 40%, #1a1f35 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(79,142,247,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -40px; left: 30%;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(79,142,247,0.15);
+      border: 1px solid rgba(79,142,247,0.3);
+      border-radius: 20px; padding: 4px 14px;
+      font-size: 12px; color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .hero h2 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+    .hero h2 span { background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: var(--text2); font-size: 15px; max-width: 600px; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 32px;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .hero-stat .label { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+    /* SECTIONS */
+    section { margin-bottom: 52px; }
+    .section-title {
+      font-size: 22px; font-weight: 700;
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title .icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .section-sub { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+
+    /* TECH GRID */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .tech-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .tech-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .tech-card.blue::before { background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+    .tech-card.purple::before { background: linear-gradient(90deg, var(--accent2), #a855f7); }
+    .tech-card.green::before { background: linear-gradient(90deg, var(--green), #34d399); }
+    .tech-card.orange::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+    .tech-card:hover { border-color: rgba(79,142,247,0.4); transform: translateY(-2px); }
+    .tech-icon { font-size: 28px; margin-bottom: 12px; }
+    .tech-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .tech-version {
+      display: inline-block; font-size: 10px;
+      background: rgba(79,142,247,0.15); color: var(--accent);
+      border-radius: 4px; padding: 1px 7px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 10px;
+    }
+    .tech-desc { font-size: 12px; color: var(--text2); }
+
+    /* SYSTEM DESIGN */
+    .arch-diagram {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 20px;
+    }
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      row-gap: 24px;
+    }
+    .arch-node {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 22px;
+      text-align: center;
+      min-width: 130px;
+      position: relative;
+    }
+    .arch-node .n-icon { font-size: 26px; margin-bottom: 6px; }
+    .arch-node .n-title { font-size: 13px; font-weight: 700; }
+    .arch-node .n-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+    .arch-node .n-port {
+      display: inline-block; font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(79,142,247,0.1); color: var(--accent);
+      border-radius: 4px; padding: 1px 6px; margin-top: 6px;
+    }
+    .arch-node.highlight { border-color: rgba(79,142,247,0.5); box-shadow: 0 0 20px rgba(79,142,247,0.1); }
+    .arch-arrow {
+      font-size: 22px; color: var(--accent);
+      padding: 0 8px; flex-shrink: 0;
+    }
+    .arch-side {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .arch-side-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      justify-content: center;
+    }
+    .arch-small {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 20px;
+      text-align: center;
+      min-width: 110px;
+    }
+    .arch-small .s-icon { font-size: 20px; }
+    .arch-small .s-title { font-size: 12px; font-weight: 600; margin-top: 4px; }
+    .arch-small .s-sub { font-size: 10px; color: var(--text3); }
+
+    /* ROUTES TABLE */
+    .route-group { margin-bottom: 28px; }
+    .route-group-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px 12px 0 0;
+      border-bottom: none;
+    }
+    .route-group-icon { font-size: 20px; }
+    .route-group-title { font-size: 15px; font-weight: 700; }
+    .route-group-prefix {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--accent);
+      background: rgba(79,142,247,0.1);
+      border-radius: 5px; padding: 2px 8px;
+      margin-left: auto;
+    }
+    .route-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+    }
+    .route-table th {
+      background: var(--bg3); color: var(--text3);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+      padding: 10px 16px; text-align: left; font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .route-table td {
+      padding: 11px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(42,53,80,0.5);
+      vertical-align: top;
+    }
+    .route-table tr:last-child td { border-bottom: none; }
+    .route-table tr:hover td { background: rgba(79,142,247,0.04); }
+    .method {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 4px;
+      display: inline-block; min-width: 52px; text-align: center;
+    }
+    .method.GET { background: rgba(16,185,129,0.15); color: var(--green); }
+    .method.POST { background: rgba(79,142,247,0.15); color: var(--accent); }
+    .method.PUT { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .method.PATCH { background: rgba(249,115,22,0.15); color: var(--orange); }
+    .method.DELETE { background: rgba(239,68,68,0.15); color: var(--red); }
+    .route-path {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--text);
+    }
+    .perm-badge {
+      display: inline-block; font-size: 10px;
+      padding: 1px 7px; border-radius: 4px; margin: 1px;
+      font-weight: 600;
+    }
+    .perm-badge.admin { background: rgba(239,68,68,0.15); color: var(--red); }
+    .perm-badge.auth { background: rgba(79,142,247,0.15); color: var(--accent); }
+    .perm-badge.any { background: rgba(16,185,129,0.15); color: var(--green); }
+    .perm-badge.teacher { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .perm-badge.student { background: rgba(124,58,237,0.15); color: #a78bfa; }
+    .perm-badge.staff { background: rgba(6,182,212,0.15); color: var(--accent3); }
+    .resp-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; padding: 1px 6px; border-radius: 3px;
+      display: inline-block;
+    }
+    .resp-code.s200 { background: rgba(16,185,129,0.12); color: var(--green); }
+    .resp-code.s201 { background: rgba(79,142,247,0.12); color: var(--accent); }
+    .resp-code.s204 { background: rgba(100,116,139,0.2); color: var(--text2); }
+
+    /* ERROR HANDLING */
+    .error-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .error-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .error-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px;
+    }
+    .error-card.e400::before { background: var(--yellow); }
+    .error-card.e401::before { background: var(--accent); }
+    .error-card.e403::before { background: var(--orange); }
+    .error-card.e404::before { background: var(--accent2); }
+    .error-card.e503::before { background: var(--red); }
+    .error-code {
+      font-size: 28px; font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 4px;
+    }
+    .error-card.e400 .error-code { color: var(--yellow); }
+    .error-card.e401 .error-code { color: var(--accent); }
+    .error-card.e403 .error-code { color: var(--orange); }
+    .error-card.e404 .error-code { color: var(--accent2); }
+    .error-card.e503 .error-code { color: var(--red); }
+    .error-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .error-desc { font-size: 12px; color: var(--text2); margin-bottom: 14px; }
+    .error-example {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #e6edf3;
+      line-height: 1.5;
+    }
+    .json-key { color: #79c0ff; }
+    .json-str { color: #a5d6ff; }
+    .json-num { color: #f97316; }
+
+    /* SCORING */
+    .score-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px; margin-bottom: 20px;
+    }
+    .score-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .score-name { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    .score-bar-bg {
+      background: var(--bg3); border-radius: 4px; height: 6px; margin-bottom: 6px;
+    }
+    .score-bar { height: 6px; border-radius: 4px; }
+    .score-max { font-size: 11px; color: var(--text3); }
+    .score-val { font-size: 20px; font-weight: 800; color: var(--accent); }
+
+    /* FLOW */
+    .flow {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .flow-step {
+      display: flex; gap: 20px; align-items: flex-start;
+    }
+    .flow-line {
+      display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+    }
+    .flow-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: white; flex-shrink: 0;
+    }
+    .flow-connector {
+      width: 2px; background: linear-gradient(to bottom, var(--accent), transparent);
+      height: 36px; margin-top: 4px;
+    }
+    .flow-content {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      flex: 1;
+      margin-bottom: 12px;
+    }
+    .flow-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .flow-content p { font-size: 12px; color: var(--text2); }
+
+    /* ROLES TABLE */
+    .roles-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .roles-table th {
+      background: var(--bg3); color: var(--text3);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+      padding: 12px 16px; text-align: left; font-weight: 600;
+    }
+    .roles-table td {
+      padding: 12px 16px; font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+    .roles-table tr:hover td { background: rgba(79,142,247,0.04); }
+    .check { color: var(--green); font-size: 16px; }
+    .cross { color: var(--red); font-size: 16px; }
+    .partial { color: var(--yellow); font-size: 16px; }
+    .role-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: rgba(79,142,247,0.1);
+      color: var(--accent);
+      padding: 1px 6px; border-radius: 4px;
+    }
+
+    .info-box {
+      background: rgba(79,142,247,0.08);
+      border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 20px;
+    }
+    .info-box strong { color: var(--accent); }
+
+    .tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tag.new { background: rgba(16,185,129,0.15); color: var(--green); }
+    .tag.jwt { background: rgba(124,58,237,0.15); color: #a78bfa; }
+    .tag.async { background: rgba(6,182,212,0.15); color: var(--accent3); }
+
+    /* DIVIDER */
+    .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>📚 EduMetric CRM</h1>
+    <p>Texnik Dokumentatsiya v1.0</p>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-title">Umumiy</div>
+      <a class="nav-item active" href="#overview"><span class="dot" style="background:#4f8ef7"></span>Loyiha haqida</a>
+      <a class="nav-item" href="#technologies"><span class="dot" style="background:#06b6d4"></span>Texnologiyalar</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-title">Arxitektura</div>
+      <a class="nav-item" href="#system-design"><span class="dot" style="background:#7c3aed"></span>System Design</a>
+      <a class="nav-item" href="#flow"><span class="dot" style="background:#10b981"></span>So'rov oqimi</a>
+      <a class="nav-item" href="#roles"><span class="dot" style="background:#f59e0b"></span>Rollar & Ruxsatlar</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-title">API Routes</div>
+      <a class="nav-item" href="#routes-auth"><span class="dot" style="background:#4f8ef7"></span>Auth</a>
+      <a class="nav-item" href="#routes-academic"><span class="dot" style="background:#06b6d4"></span>Academic</a>
+      <a class="nav-item" href="#routes-attendance"><span class="dot" style="background:#10b981"></span>Attendance</a>
+      <a class="nav-item" href="#routes-assignments"><span class="dot" style="background:#f59e0b"></span>Assignments</a>
+      <a class="nav-item" href="#routes-activities"><span class="dot" style="background:#7c3aed"></span>Activities</a>
+      <a class="nav-item" href="#routes-grants"><span class="dot" style="background:#ef4444"></span>Grants</a>
+      <a class="nav-item" href="#routes-penalties"><span class="dot" style="background:#f97316"></span>Penalties</a>
+      <a class="nav-item" href="#routes-evaluations"><span class="dot" style="background:#a855f7"></span>Evaluations</a>
+      <a class="nav-item" href="#routes-gateway"><span class="dot" style="background:#06b6d4"></span>Gateway</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-title">Xatoliklar</div>
+      <a class="nav-item" href="#errors"><span class="dot" style="background:#ef4444"></span>Error Handling</a>
+      <a class="nav-item" href="#scoring"><span class="dot" style="background:#10b981"></span>Grant Scoring</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- HERO -->
+  <div id="overview" class="hero">
+    <div class="hero-badge"><span></span> v1.0.0 · 2026</div>
+    <h2>EduMetric <span>Grant Management</span><br>CRM Dokumentatsiya</h2>
+    <p>PDP University uchun grant boshqaruv tizimi — talabalar ballarini hisoblash, grant ajratish, davomot va jarimalari boshqarish.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">3</div><div class="label">Servis</div></div>
+      <div class="hero-stat"><div class="num">8</div><div class="label">API Module</div></div>
+      <div class="hero-stat"><div class="num">45+</div><div class="label">Endpoint</div></div>
+      <div class="hero-stat"><div class="num">7</div><div class="label">Rol</div></div>
+    </div>
+  </div>
+
+  <!-- TECHNOLOGIES -->
+  <section id="technologies">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(79,142,247,0.15)">⚙️</div>
+      Ishlatilgan Texnologiyalar
+    </div>
+    <p class="section-sub">Loyihada ishlatiladigan barcha framework, kutubxona va infratuzilma vositalari</p>
+
+    <p style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🖥️ Backend (Django)</p>
+    <div class="tech-grid" style="margin-bottom:24px">
+      <div class="tech-card blue">
+        <div class="tech-icon">🐍</div>
+        <div class="tech-name">Django</div>
+        <div class="tech-version">5.1.4</div>
+        <div class="tech-desc">Asosiy backend framework. ORM, migrations, admin panel, middleware.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">🔌</div>
+        <div class="tech-name">Django REST Framework</div>
+        <div class="tech-version">3.15.2</div>
+        <div class="tech-desc">RESTful API qurish uchun. ViewSet, Serializer, Router, Pagination.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">🔐</div>
+        <div class="tech-name">SimpleJWT</div>
+        <div class="tech-version">5.4.0</div>
+        <div class="tech-desc">JWT autentifikatsiya. Access/Refresh tokenlar, token blacklist.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">🔍</div>
+        <div class="tech-name">django-filter</div>
+        <div class="tech-version">24.3</div>
+        <div class="tech-desc">API so'rovlarini filtrlash. Search va Ordering backends.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">⏱️</div>
+        <div class="tech-name">Celery</div>
+        <div class="tech-version">5.4.0</div>
+        <div class="tech-desc">Asinxron task queue. Grant ballari hisoblash tasks.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">📅</div>
+        <div class="tech-name">django-celery-beat</div>
+        <div class="tech-version">2.7.0</div>
+        <div class="tech-desc">Rejalashtirilgan vazifalar (cron jobs). DB scheduler.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">📖</div>
+        <div class="tech-name">drf-spectacular</div>
+        <div class="tech-version">0.28.0</div>
+        <div class="tech-desc">OpenAPI 3.0 schema va Swagger UI avtomatik generatsiya.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">🗄️</div>
+        <div class="tech-name">psycopg2</div>
+        <div class="tech-version">2.9.10</div>
+        <div class="tech-desc">PostgreSQL Python adapteri. Async-ready database connector.</div>
+      </div>
+      <div class="tech-card blue">
+        <div class="tech-icon">💾</div>
+        <div class="tech-name">django-redis</div>
+        <div class="tech-version">5.4.0</div>
+        <div class="tech-desc">Redis cache backend. Session va query caching.</div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">⚡ Gateway (FastAPI)</p>
+    <div class="tech-grid" style="margin-bottom:24px">
+      <div class="tech-card purple">
+        <div class="tech-icon">⚡</div>
+        <div class="tech-name">FastAPI</div>
+        <div class="tech-version">0.115.6</div>
+        <div class="tech-desc">API Gateway framework. Async proxy, CORS middleware, health checks.</div>
+      </div>
+      <div class="tech-card purple">
+        <div class="tech-icon">🦄</div>
+        <div class="tech-name">Uvicorn</div>
+        <div class="tech-version">0.34.0</div>
+        <div class="tech-desc">ASGI server. FastAPI ni ishga tushirish uchun.</div>
+      </div>
+      <div class="tech-card purple">
+        <div class="tech-icon">🌐</div>
+        <div class="tech-name">HTTPX</div>
+        <div class="tech-version">0.28.1</div>
+        <div class="tech-desc">Async HTTP client. Backend ga proxy so'rovlar yuborish.</div>
+      </div>
+      <div class="tech-card purple">
+        <div class="tech-icon">⚙️</div>
+        <div class="tech-name">pydantic-settings</div>
+        <div class="tech-version">2.7.1</div>
+        <div class="tech-desc">Environment o'zgaruvchilarni type-safe boshqarish.</div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🎨 Frontend (Next.js)</p>
+    <div class="tech-grid" style="margin-bottom:24px">
+      <div class="tech-card green">
+        <div class="tech-icon">▲</div>
+        <div class="tech-name">Next.js</div>
+        <div class="tech-version">15.1.0</div>
+        <div class="tech-desc">React SSR framework. App Router, TypeScript, API routes.</div>
+      </div>
+      <div class="tech-card green">
+        <div class="tech-icon">⚛️</div>
+        <div class="tech-name">React</div>
+        <div class="tech-version">19.0.0</div>
+        <div class="tech-desc">UI komponent kutubxonasi. Hooks, Context API.</div>
+      </div>
+      <div class="tech-card green">
+        <div class="tech-icon">💎</div>
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-version">5.7.0</div>
+        <div class="tech-desc">Type-safe JavaScript. Interface, type, generic support.</div>
+      </div>
+      <div class="tech-card green">
+        <div class="tech-icon">🎨</div>
+        <div class="tech-name">TailwindCSS</div>
+        <div class="tech-version">3.4.17</div>
+        <div class="tech-desc">Utility-first CSS framework. Responsive dizayn.</div>
+      </div>
+      <div class="tech-card green">
+        <div class="tech-icon">🧩</div>
+        <div class="tech-name">Radix UI</div>
+        <div class="tech-version">latest</div>
+        <div class="tech-desc">Accessible komponentlar. Dialog, Select, Tabs, Toast va h.k.</div>
+      </div>
+      <div class="tech-card green">
+        <div class="tech-icon">📊</div>
+        <div class="tech-name">Recharts</div>
+        <div class="tech-version">2.15.0</div>
+        <div class="tech-desc">React chart kutubxonasi. Dashboard statistikalar.</div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">🏗️ Infratuzilma</p>
+    <div class="tech-grid">
+      <div class="tech-card orange">
+        <div class="tech-icon">🐘</div>
+        <div class="tech-name">PostgreSQL</div>
+        <div class="tech-version">16-alpine</div>
+        <div class="tech-desc">Asosiy ma'lumotlar bazasi. Relatsion DB, indekslar.</div>
+      </div>
+      <div class="tech-card orange">
+        <div class="tech-icon">🔴</div>
+        <div class="tech-name">Redis</div>
+        <div class="tech-version">7-alpine</div>
+        <div class="tech-desc">Cache va message broker. Celery uchun ham ishlatiladi.</div>
+      </div>
+      <div class="tech-card orange">
+        <div class="tech-icon">🐳</div>
+        <div class="tech-name">Docker Compose</div>
+        <div class="tech-version">3.9</div>
+        <div class="tech-desc">6 ta konteyner: db, redis, backend, celery, celery-beat, gateway, frontend.</div>
+      </div>
+      <div class="tech-card orange">
+        <div class="tech-icon">🦅</div>
+        <div class="tech-name">Gunicorn</div>
+        <div class="tech-version">23.0.0</div>
+        <div class="tech-desc">Production WSGI server Django uchun.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SYSTEM DESIGN -->
+  <section id="system-design">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(124,58,237,0.15)">🏛️</div>
+      System Design
+    </div>
+    <p class="section-sub">Loyihaning umumiy arxitekturasi va servislar o'rtasidagi aloqa</p>
+
+    <div class="arch-diagram">
+      <div style="text-align:center;font-size:12px;color:var(--text3);margin-bottom:24px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Umumiy Arxitektura</div>
+      <div class="arch-flow">
+        <div class="arch-node highlight">
+          <div class="n-icon">👤</div>
+          <div class="n-title">Browser / Client</div>
+          <div class="n-sub">Foydalanuvchi</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node highlight">
+          <div class="n-icon">▲</div>
+          <div class="n-title">Frontend</div>
+          <div class="n-sub">Next.js + React</div>
+          <div class="n-port">:3000</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node highlight">
+          <div class="n-icon">⚡</div>
+          <div class="n-title">Gateway</div>
+          <div class="n-sub">FastAPI Proxy</div>
+          <div class="n-port">:8080</div>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node highlight">
+          <div class="n-icon">🐍</div>
+          <div class="n-title">Backend</div>
+          <div class="n-sub">Django DRF</div>
+          <div class="n-port">:8000</div>
+        </div>
+      </div>
+
+      <div class="arch-side">
+        <div class="arch-side-row">
+          <div style="text-align:center;color:var(--text3);font-size:12px;margin-right:8px;">Backend bog'langan servislar:</div>
+          <div class="arch-small">
+            <div class="s-icon">🐘</div>
+            <div class="s-title">PostgreSQL</div>
+            <div class="s-sub">Ma'lumotlar bazasi · :5432</div>
+          </div>
+          <div class="arch-arrow" style="font-size:16px">↔</div>
+          <div class="arch-small">
+            <div class="s-icon">🔴</div>
+            <div class="s-title">Redis</div>
+            <div class="s-sub">Cache & Broker · :6379</div>
+          </div>
+          <div class="arch-arrow" style="font-size:16px">↔</div>
+          <div class="arch-small">
+            <div class="s-icon">⏱️</div>
+            <div class="s-title">Celery</div>
+            <div class="s-sub">Async Worker</div>
+          </div>
+          <div class="arch-arrow" style="font-size:16px">+</div>
+          <div class="arch-small">
+            <div class="s-icon">📅</div>
+            <div class="s-title">Beat</div>
+            <div class="s-sub">Cron Scheduler</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Gateway vazifasi:</strong> Frontend barcha API so'rovlarini to'g'ridan-to'g'ri Django backend ga emas, balki FastAPI Gateway ga yuboradi (<code>http://localhost:8080/api/v1/...</code>). Gateway so'rovni proxy qilib backendga (<code>http://backend:8000</code>) yuboradi. Bu CORS, load balancing va kelajakda rate limiting uchun qulay.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">📦 Docker Servislar</div>
+        <div style="font-size:13px;color:var(--text2);line-height:2">
+          <div>🐘 <code>db</code> — PostgreSQL 16</div>
+          <div>🔴 <code>redis</code> — Redis 7</div>
+          <div>🐍 <code>backend</code> — Django + Gunicorn</div>
+          <div>⏱️ <code>celery</code> — Worker</div>
+          <div>📅 <code>celery-beat</code> — Scheduler</div>
+          <div>⚡ <code>gateway</code> — FastAPI</div>
+          <div>▲ <code>frontend</code> — Next.js dev</div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">🔧 Django Apps</div>
+        <div style="font-size:13px;color:var(--text2);line-height:2">
+          <div>👤 <code>accounts</code> — Foydalanuvchilar</div>
+          <div>🎓 <code>academic</code> — Semestr, fanlar</div>
+          <div>📋 <code>attendance</code> — Davomot</div>
+          <div>📝 <code>assignments</code> — Topshiriqlar</div>
+          <div>🏆 <code>activities</code> — Faoliyat</div>
+          <div>💰 <code>grants</code> — Grant tizimi</div>
+          <div>⚠️ <code>penalties</code> — Jarimalar</div>
+          <div>📊 <code>evaluations</code> — Baholash</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- REQUEST FLOW -->
+  <section id="flow">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(16,185,129,0.15)">🔄</div>
+      So'rov Oqimi (Request Flow)
+    </div>
+    <p class="section-sub">Frontend dan Backend gacha so'rov qanday yo'nalish bosib o'tadi</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-line">
+          <div class="flow-num">1</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>👤 Foydalanuvchi login qiladi</h4>
+          <p>Frontend: <code>POST /api/v1/auth/token/</code> — username va password yuboradi. Yoki <code>POST /api/v1/auth/phone-login/</code> orqali telefon raqam bilan.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line">
+          <div class="flow-num">2</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>⚡ Gateway so'rovni qabul qiladi</h4>
+          <p>FastAPI Gateway <code>:8080</code> portida so'rovni qabul qilib, HTTPX async client orqali Django Backend ga <code>:8000</code> proxy qiladi. Host headerini olib tashlaydi.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line">
+          <div class="flow-num">3</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>🐍 Django JWT token qaytaradi</h4>
+          <p><code>CustomTokenObtainPairSerializer</code> ishlatiladi. Token payload ga <code>role</code> va <code>full_name</code> qo'shiladi. Access (60 min) va Refresh (7 kun) tokenlar qaytariladi.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line">
+          <div class="flow-num">4</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>🔐 Keyingi so'rovlarda Authorization header</h4>
+          <p>Frontend: <code>Authorization: Bearer &lt;access_token&gt;</code> header bilan so'rov yuboradi. JWT middleware tokenni tekshiradi va foydalanuvchini aniqlaydi.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line">
+          <div class="flow-num">5</div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-content">
+          <h4>✅ Permission tekshiruvi</h4>
+          <p>ViewSet permission klasslari (IsAdmin, IsTeacher, IsStudent va h.k.) <code>request.user.role</code> ga qarab ruxsatni tekshiradi. Ruxsat bo'lmasa <code>403 Forbidden</code>.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-line">
+          <div class="flow-num">6</div>
+        </div>
+        <div class="flow-content">
+          <h4>📦 Ma'lumot qaytariladi</h4>
+          <p>DRF Serializer orqali queryset serialize qilinadi, pagination (20 ta/sahifa) qo'llaniladi va JSON formatda response qaytariladi. Celery tasklar asinxron ishlaydi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ROLES -->
+  <section id="roles">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(245,158,11,0.15)">👥</div>
+      Rollar va Ruxsatlar
+    </div>
+    <p class="section-sub">Tizimda 7 ta rol mavjud, har biri turli resurslarga turli darajada kirish huquqiga ega</p>
+
+    <table class="roles-table">
+      <thead>
+        <tr>
+          <th>Rol</th>
+          <th>Users</th>
+          <th>Students</th>
+          <th>Grants</th>
+          <th>Attendance</th>
+          <th>Evaluations</th>
+          <th>Penalties</th>
+          <th>Logs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(239,68,68,0.15);color:#ef4444">🔴 Admin</span></td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+        </tr>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(239,68,68,0.12);color:#f87171">🟠 Manager</span></td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+          <td class="check">✔ Full</td>
+        </tr>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(245,158,11,0.15);color:#f59e0b">🟡 Teacher</span></td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="check">✔ Create</td>
+          <td class="check">✔ Mentor</td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Own</td>
+        </tr>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(6,182,212,0.15);color:#06b6d4">🔵 Tutor</span></td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="check">✔ Evaluate</td>
+          <td class="check">✔ Create</td>
+          <td class="partial">○ Own</td>
+        </tr>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(124,58,237,0.15);color:#a78bfa">🟣 Student</span></td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Own</td>
+          <td class="partial">○ Own</td>
+          <td class="partial">○ Own</td>
+          <td class="partial">○ Own</td>
+          <td class="partial">○ Own</td>
+          <td class="partial">○ Own</td>
+        </tr>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(16,185,129,0.15);color:#10b981">🟢 Parent</span></td>
+          <td class="cross">✗</td>
+          <td class="partial">○ Children</td>
+          <td class="partial">○ Children</td>
+          <td class="partial">○ Children</td>
+          <td class="partial">○ Children</td>
+          <td class="partial">○ Children</td>
+          <td class="cross">✗</td>
+        </tr>
+        <tr>
+          <td><span class="role-tag" style="background:rgba(100,116,139,0.2);color:#94a3b8">⚪ Komendant</span></td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="partial">○ Read</td>
+          <td class="check">✔ Evaluate</td>
+          <td class="check">✔ Create</td>
+          <td class="partial">○ Own</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--text3);margin-top:8px">✔ Full — to'liq CRUD | ○ Cheklangan | ✗ Kirish yo'q</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ROUTES: AUTH -->
+  <section id="routes-auth">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(79,142,247,0.15)">🔐</div>
+      API Routes — Autentifikatsiya
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/auth/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">🔑</span>
+        <span class="route-group-title">Token va Login</span>
+        <span class="route-group-prefix">/api/v1/auth/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">token/</td>
+            <td>JWT login (username+password). Payload: role, full_name <span class="tag jwt">JWT</span></td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span> access, refresh</td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">token/refresh/</td>
+            <td>Access tokenni yangilash. Rotate qilinadi, eski blacklist qilinadi</td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span> access</td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">phone-login/</td>
+            <td>Telefon raqam bilan kirish (ota-ona uchun) <span class="tag new">Custom</span></td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span> access, refresh</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">my-children/</td>
+            <td>Parent foydalanuvchi o'z farzandlari ro'yxatini oladi</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span> []children</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">👥</span>
+        <span class="route-group-title">Users (ModelViewSet)</span>
+        <span class="route-group-prefix">/api/v1/auth/users/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">users/</td>
+            <td>Barcha foydalanuvchilar. Filter: role, is_active. Search: ism, familiya</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span> paginated list</td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">users/</td>
+            <td>Yangi foydalanuvchi yaratish (UserCreateSerializer)</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">users/{id}/</td>
+            <td>Bitta foydalanuvchi ma'lumoti</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method PUT">PUT</span></td>
+            <td class="route-path">users/{id}/</td>
+            <td>To'liq yangilash</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method PATCH">PATCH</span></td>
+            <td class="route-path">users/{id}/</td>
+            <td>Qisman yangilash</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method DELETE">DELETE</span></td>
+            <td class="route-path">users/{id}/</td>
+            <td>O'chirish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s204">204</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">users/me/</td>
+            <td>Joriy foydalanuvchi profili (UserMeSerializer)</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">users/teachers/</td>
+            <td>Barcha faol o'qituvchilar</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span> []</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">users/tutors/</td>
+            <td>Barcha faol tyutorlar</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span> []</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">students/</td>
+            <td>Talabalar profili. Filter: group, course, semester, status, grant_status</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span> paginated</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">logs/</td>
+            <td>Faollik loglari. Admin/Manager — hammasi, boshqalar — o'ziniki</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span> paginated</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: ACADEMIC -->
+  <section id="routes-academic">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(6,182,212,0.15)">🎓</div>
+      API Routes — Academic
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/academic/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">🎓</span>
+        <span class="route-group-title">Semestrlar, Fanlar, Akademik Rekordlar</span>
+        <span class="route-group-prefix">/api/v1/academic/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">semesters/</td>
+            <td>Barcha semestrlar ro'yxati</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">semesters/</td>
+            <td>Yangi semestr yaratish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">semesters/{id}/</td>
+            <td>Bitta semestr</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">subjects/</td>
+            <td>Fanlar ro'yxati</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">subjects/</td>
+            <td>Yangi fan qo'shish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">records/</td>
+            <td>Akademik rekordlar (baholar)</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">records/</td>
+            <td>Yangi akademik rekord</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: ATTENDANCE -->
+  <section id="routes-attendance">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(16,185,129,0.15)">📋</div>
+      API Routes — Attendance (Davomot)
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/attendance/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">📋</span>
+        <span class="route-group-title">Davomot Yozuvlari va Xulosalar</span>
+        <span class="route-group-prefix">/api/v1/attendance/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">records/</td>
+            <td>Davomot yozuvlari. Student — o'ziniki, Parent — farzandi, Teacher — o'z fanlari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">records/</td>
+            <td>Yangi davomot yozuvi. recorded_by = joriy foydalanuvchi</td>
+            <td><span class="perm-badge teacher">IsAdminOrTeacher</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">records/bulk_create/</td>
+            <td>Ko'p talabalar uchun bir vaqtda davomot. update_or_create ishlatiladi. Summary qayta hisoblanadi <span class="tag async">Bulk</span></td>
+            <td><span class="perm-badge teacher">IsAdminOrTeacher</span></td>
+            <td><span class="resp-code s201">201</span> []</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">records/{id}/</td>
+            <td>Bitta yozuv</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">summary/</td>
+            <td>Davomot xulosasi (ReadOnly). Jami kelgan/kelmagan, foiz</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">summary/{id}/</td>
+            <td>Bitta talaba xulosasi</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: ASSIGNMENTS -->
+  <section id="routes-assignments">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(245,158,11,0.15)">📝</div>
+      API Routes — Assignments (Topshiriqlar)
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/assignments/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">📝</span>
+        <span class="route-group-title">Topshiriqlar, Topshirish, Balllar</span>
+        <span class="route-group-prefix">/api/v1/assignments/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">tasks/</td>
+            <td>Barcha topshiriqlar ro'yxati</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">tasks/</td>
+            <td>Yangi topshiriq yaratish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">submissions/</td>
+            <td>Topshiriq topshiruvlar</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">submissions/</td>
+            <td>Topshiriq topshirish</td>
+            <td><span class="perm-badge student">IsStudent</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">scores/</td>
+            <td>Topshiriq ballari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">scores/</td>
+            <td>Ball qo'yish</td>
+            <td><span class="perm-badge teacher">IsAdminOrTeacher</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: ACTIVITIES -->
+  <section id="routes-activities">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(124,58,237,0.15)">🏆</div>
+      API Routes — Activities (Faoliyat)
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/activities/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">🏆</span>
+        <span class="route-group-title">Faoliyatlar va Faoliyat Ballari</span>
+        <span class="route-group-prefix">/api/v1/activities/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">items/</td>
+            <td>Barcha faoliyatlar (olimpiadalar, loyihalar va h.k.)</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">items/</td>
+            <td>Yangi faoliyat qo'shish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">scores/</td>
+            <td>Faoliyat ballari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">scores/</td>
+            <td>Talabaga ball berish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: GRANTS -->
+  <section id="routes-grants">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(239,68,68,0.15)">💰</div>
+      API Routes — Grants (Grant Tizimi)
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/grants/</code> — loyihaning asosiy qismi</p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">💰</span>
+        <span class="route-group-title">Grant Ballari, Ish, Ajratish</span>
+        <span class="route-group-prefix">/api/v1/grants/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">scores/</td>
+            <td>Grant ballari. Student — o'ziniki, Parent — farzandi, Admin — hammasi</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">scores/calculate/</td>
+            <td>Semestr uchun barcha talabalar ballarini hisoblash. GrantScoringService ishlatiladi <span class="tag async">Service</span></td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span> count</td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">scores/{id}/calculate_single/</td>
+            <td>Bitta talaba balini hisoblash</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">scores/public_rating/</td>
+            <td>Ommaviy reyting jadvali. ?semester=id parametri. Faol semestr default <span class="tag new">Public</span></td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span> []</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">scores/eligible/</td>
+            <td>Grant olishga loyiq talabalar. ?semester=id&min_score=80</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span> []</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">scores/dashboard_stats/</td>
+            <td>Dashboard statistika: jami, o'rtacha, max, min ball, grantga loyiqlar soni</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span> stats</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">employment/</td>
+            <td>Ish joyidagi amaliyot yozuvlari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">employment/</td>
+            <td>Ish joyi qo'shish. student = joriy foydalanuvchi profili <span class="tag new">Auto-assign</span></td>
+            <td><span class="perm-badge student">IsStudent</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">employment/{id}/verify/</td>
+            <td>Ish joyini tasdiqlash/rad etish. action: approve|reject. score berish mumkin</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">allocations/</td>
+            <td>Grant ajratish qarorlari</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">allocations/</td>
+            <td>Grant ajratish. Approved bo'lsa student.grant_status = active qilinadi</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: PENALTIES -->
+  <section id="routes-penalties">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(249,115,22,0.15)">⚠️</div>
+      API Routes — Penalties (Jarimalar)
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/penalties/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">⚠️</span>
+        <span class="route-group-title">Jarimalar, Tiklanish, Xulosa</span>
+        <span class="route-group-prefix">/api/v1/penalties/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">items/</td>
+            <td>Jarimalar. Student — o'ziniki, Parent — farzandi, Admin — hammasi</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">items/</td>
+            <td>Jarima berish. issued_by = joriy foydalanuvchi. Summary qayta hisoblanadi</td>
+            <td><span class="perm-badge staff">IsAdminOrStaff</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">recovery/</td>
+            <td>Tiklanish vazifalari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">recovery/</td>
+            <td>Tiklanish vazifasi yaratish</td>
+            <td><span class="perm-badge staff">IsAdminOrStaff</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">recovery/{id}/complete/</td>
+            <td>Student — in_progress, Staff/Admin — completed. Xato talaba bo'lsa 403</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">summary/</td>
+            <td>Jarima xulosasi (ReadOnly). Jami jarima ballari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: EVALUATIONS -->
+  <section id="routes-evaluations">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(168,85,247,0.15)">📊</div>
+      API Routes — Evaluations (Baholash)
+    </div>
+    <p class="section-sub">Prefix: <code>/api/v1/evaluations/</code></p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">📊</span>
+        <span class="route-group-title">Tyutor, Mentor, Intizom</span>
+        <span class="route-group-prefix">/api/v1/evaluations/</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">tutor/</td>
+            <td>Tyutor baholari. Staff — o'zi berganlari, Student/Parent — o'ziga tegishlisi</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">tutor/</td>
+            <td>Tyutor bahosi qo'yish. evaluator = joriy foydalanuvchi</td>
+            <td><span class="perm-badge staff">IsStaff</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method DELETE">DELETE</span></td>
+            <td class="route-path">tutor/{id}/</td>
+            <td>Bahoni o'chirish</td>
+            <td><span class="perm-badge admin">IsAdmin</span></td>
+            <td><span class="resp-code s204">204</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">mentor/</td>
+            <td>Mentor (o'qituvchi) fikrlari. Teacher — o'zi yozganlari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">mentor/</td>
+            <td>Mentor fikri qo'shish. mentor = joriy foydalanuvchi</td>
+            <td><span class="perm-badge teacher">IsTeacher</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">discipline/</td>
+            <td>Intizom yozuvlari</td>
+            <td><span class="perm-badge auth">IsAuthenticated</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">discipline/</td>
+            <td>Intizom yozuvi qo'shish. recorded_by = joriy foydalanuvchi</td>
+            <td><span class="perm-badge staff">IsAdminOrStaff</span></td>
+            <td><span class="resp-code s201">201</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROUTES: GATEWAY -->
+  <section id="routes-gateway">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(6,182,212,0.15)">⚡</div>
+      Gateway Routes (FastAPI)
+    </div>
+    <p class="section-sub">FastAPI Gateway — <code>:8080</code> portida ishlaydi</p>
+
+    <div class="route-group">
+      <div class="route-group-header">
+        <span class="route-group-icon">⚡</span>
+        <span class="route-group-title">Gateway Endpointlar</span>
+        <span class="route-group-prefix">:8080</span>
+      </div>
+      <table class="route-table">
+        <thead><tr><th>Metod</th><th>URL</th><th>Tavsif</th><th>Ruxsat</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">/health</td>
+            <td>Gateway sog'ligi. {"status": "healthy", "service": "gateway"}</td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">/health/backend</td>
+            <td>Backend mavjudligini tekshirish. Backend ulanmagan bo'lsa 503</td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span> / 503</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">/api/v1/{path}</td>
+            <td>Barcha GET so'rovlarni Backend ga proxy qiladi</td>
+            <td>—</td>
+            <td>Backend response</td>
+          </tr>
+          <tr>
+            <td><span class="method POST">POST</span></td>
+            <td class="route-path">/api/v1/{path}</td>
+            <td>POST so'rovlarni proxy qiladi. Body, headers, query params o'tkaziladi</td>
+            <td>—</td>
+            <td>Backend response</td>
+          </tr>
+          <tr>
+            <td><span class="method PUT">PUT</span> <span class="method PATCH">PATCH</span> <span class="method DELETE">DELETE</span></td>
+            <td class="route-path">/api/v1/{path}</td>
+            <td>Barcha metodlar qo'llab-quvvatlanadi. Host header olib tashlanadi</td>
+            <td>—</td>
+            <td>Backend response</td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">/api/schema/{path}</td>
+            <td>OpenAPI schema proxy</td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+          <tr>
+            <td><span class="method GET">GET</span></td>
+            <td class="route-path">/api/docs/{path}</td>
+            <td>Swagger UI proxy</td>
+            <td><span class="perm-badge any">AllowAny</span></td>
+            <td><span class="resp-code s200">200</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ERROR HANDLING -->
+  <section id="errors">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(239,68,68,0.15)">🚨</div>
+      Error Handling
+    </div>
+    <p class="section-sub">Tizimda ishlatilgan barcha xatolik turlari va ularning JSON formati</p>
+
+    <div class="error-grid">
+
+      <div class="error-card e400">
+        <div class="error-code">400</div>
+        <div class="error-title">Bad Request — Validatsiya xatosi</div>
+        <div class="error-desc">Serializer.is_valid(raise_exception=True) avtomatik chaqiriladi. Maydon xatolari field-level ko'rsatiladi.</div>
+        <div class="error-example">
+{<br>
+&nbsp;&nbsp;<span class="json-key">"username"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-str">"Bu maydon talab qilinadi"</span><br>
+&nbsp;&nbsp;],<br>
+&nbsp;&nbsp;<span class="json-key">"password"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-str">"Kamida 8 belgi"</span><br>
+&nbsp;&nbsp;]<br>
+}
+        </div>
+      </div>
+
+      <div class="error-card e401">
+        <div class="error-code">401</div>
+        <div class="error-title">Unauthorized — Autentifikatsiya yo'q</div>
+        <div class="error-desc">JWT token yo'q yoki muddati o'tgan. DRF JWTAuthentication avtomatik qaytaradi.</div>
+        <div class="error-example">
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Authentication credentials were not provided."</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"code"</span>: <span class="json-str">"not_authenticated"</span><br>
+}<br>
+<br>
+<span style="color:#6e7681">// Token muddati o'tgan:</span><br>
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Token is invalid or expired"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"code"</span>: <span class="json-str">"token_not_valid"</span><br>
+}
+        </div>
+      </div>
+
+      <div class="error-card e403">
+        <div class="error-code">403</div>
+        <div class="error-title">Forbidden — Ruxsat yo'q</div>
+        <div class="error-desc">Foydalanuvchi autentifikatsiyadan o'tgan, lekin kerakli rol/huquq yo'q. Permission class qaytaradi.</div>
+        <div class="error-example">
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"You do not have permission to perform this action."</span><br>
+}<br>
+<br>
+<span style="color:#6e7681">// Recovery custom xato:</span><br>
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Bu vazifa sizga tegishli emas"</span><br>
+}<br>
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Ruxsat yo'q"</span><br>
+}
+        </div>
+      </div>
+
+      <div class="error-card e404">
+        <div class="error-code">404</div>
+        <div class="error-title">Not Found — Topilmadi</div>
+        <div class="error-desc">Ob'ekt topilmadi. DRF get_object() avtomatik qaytaradi. Ba'zi custom viewlarda ham ishlatiladi.</div>
+        <div class="error-example">
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Not found."</span><br>
+}<br>
+<br>
+<span style="color:#6e7681">// Custom (grants):</span><br>
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Faol semestr topilmadi"</span><br>
+}
+        </div>
+      </div>
+
+      <div class="error-card e503">
+        <div class="error-code">503</div>
+        <div class="error-title">Service Unavailable — Backend yetishmaydi</div>
+        <div class="error-desc">Gateway backend ga ulana olmagan. HTTPX RequestError ushlanganda qaytariladi. Faqat Gateway darajasida.</div>
+        <div class="error-example">
+<span style="color:#6e7681">// /health/backend:</span><br>
+{<br>
+&nbsp;&nbsp;<span class="json-key">"status"</span>: <span class="json-str">"unreachable"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Backend service is not available"</span><br>
+}<br>
+<br>
+<span style="color:#6e7681">// Proxy xato:</span><br>
+{<br>
+&nbsp;&nbsp;<span class="json-key">"detail"</span>: <span class="json-str">"Backend unavailable: ..."</span><br>
+}
+        </div>
+      </div>
+
+      <div class="error-card e400" style="border-left-color: var(--accent3)">
+        <div class="error-code" style="color:var(--accent3)">200</div>
+        <div class="error-title">Muvaffaqiyatli Javoblar</div>
+        <div class="error-desc">Standart DRF pagination formati. Barcha list endpointlarda (20 ta/sahifa).</div>
+        <div class="error-example">
+{<br>
+&nbsp;&nbsp;<span class="json-key">"count"</span>: <span class="json-num">42</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"next"</span>: <span class="json-str">"http://.../api/v1/...?page=2"</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"previous"</span>: <span class="json-num">null</span>,<br>
+&nbsp;&nbsp;<span class="json-key">"results"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6e7681">// ob'ektlar ro'yxati</span><br>
+&nbsp;&nbsp;]<br>
+}
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- GRANT SCORING -->
+  <section id="scoring">
+    <div class="section-title">
+      <div class="icon" style="background:rgba(16,185,129,0.15)">🏅</div>
+      Grant Scoring Tizimi
+    </div>
+    <p class="section-sub">Talabalar grant ballarini hisoblash formulasi (jami 100 ball + bonus)</p>
+
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-name">📚 Akademik (GPA)</div>
+        <div class="score-val">40</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:40%;background:linear-gradient(90deg,#4f8ef7,#06b6d4)"></div></div>
+        <div class="score-max">Maksimal: 40 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">📋 Davomot</div>
+        <div class="score-val">20</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:20%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
+        <div class="score-max">Maksimal: 20 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">📝 Topshiriqlar</div>
+        <div class="score-val">15</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:15%;background:linear-gradient(90deg,#f59e0b,#fcd34d)"></div></div>
+        <div class="score-max">Maksimal: 15 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">🏆 Faoliyat</div>
+        <div class="score-val">10</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:10%;background:linear-gradient(90deg,#7c3aed,#a855f7)"></div></div>
+        <div class="score-max">Maksimal: 10 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">📊 Tyutor bahosi</div>
+        <div class="score-val">5</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:5%;background:linear-gradient(90deg,#06b6d4,#67e8f9)"></div></div>
+        <div class="score-max">Maksimal: 5 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">🎓 Intizom</div>
+        <div class="score-val">10</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:10%;background:linear-gradient(90deg,#f97316,#fdba74)"></div></div>
+        <div class="score-max">Maksimal: 10 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">⚠️ Jarima (ayiriladi)</div>
+        <div class="score-val" style="color:var(--red)">-20</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:20%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+        <div class="score-max">Maksimal: -20 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">✅ Tiklanish (qo'shiladi)</div>
+        <div class="score-val" style="color:var(--green)">+10</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:10%;background:var(--green)"></div></div>
+        <div class="score-max">Maksimal: +10 ball</div>
+      </div>
+      <div class="score-card">
+        <div class="score-name">💼 Ish joyi (bonus)</div>
+        <div class="score-val" style="color:var(--accent3)">+10</div>
+        <div class="score-bar-bg"><div class="score-bar" style="width:10%;background:var(--accent3)"></div></div>
+        <div class="score-max">Internship: 0-5, Part-time: 5-7, Full-time: 7-10</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Formula:</strong> base_total = min(academic + attendance + assignment + activity + tutor + discipline, 100)<br>
+      <strong>final_score</strong> = max(base_total + penalty + recovery + employment, 0)<br><br>
+      <strong>GPA shart:</strong> gpa_percentage ≥ 80% bo'lmasa gpa_eligible = False → grant bloklanishi mumkin.<br>
+      <strong>Grant ajratish:</strong> 3 bosqich — Rating saralash → Suhbat → Yakuniy qaror (approved / waitlist / rejected)
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:20px">
+      <div style="font-weight:700;font-size:14px;margin-bottom:16px">📡 Celery Tasks <span class="tag async">Async</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;color:var(--text2)">
+        <div>
+          <div style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:4px">grants.tasks</div>
+          <div>Grant ballarini asinxron hisoblash. Admin trigger qilganda Celery worker bajaradi.</div>
+        </div>
+        <div>
+          <div style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:4px">celery-beat</div>
+          <div>Rejalashtirilgan vazifalar. DatabaseScheduler orqali boshqariladi. Har kecha/hafta ishga tushishi mumkin.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div style="margin-top:60px;padding:24px;border-top:1px solid var(--border);color:var(--text3);font-size:12px;text-align:center">
+    EduMetric CRM Technical Documentation · Generated 2026 · Django 5.1 + FastAPI 0.115 + Next.js 15
+  </div>
+
+</main>
+
+<script>
+  // Smooth scroll + active nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Highlight active section on scroll
+  const sections = document.querySelectorAll('section[id], div[id="overview"]');
+  const navItems = document.querySelectorAll('.nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+    });
+    navItems.forEach(item => {
+      item.classList.remove('active');
+      if (item.getAttribute('href') === '#' + current) item.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

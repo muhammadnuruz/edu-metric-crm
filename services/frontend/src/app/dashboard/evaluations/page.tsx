@@ -30,11 +30,12 @@ export default function EvaluationsPage() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     student: "",
-    behavior_score: 1,
-    social_responsibility: 1,
-    communication: 1,
-    initiative: 1,
-    teamwork: 1,
+    semester: 1,
+    corporate_culture: 1,
+    social_activity: 1,
+    soft_skills: 1,
+    discipline: 1,
+    dormitory: 1,
     comments: "",
   });
 
@@ -48,9 +49,14 @@ export default function EvaluationsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post("/evaluations/tutor/", { ...formData, student: Number(formData.student) });
+      const { comments, ...payload } = formData;
+      await api.post("/evaluations/tutor/", {
+        ...payload,
+        student: Number(formData.student),
+        comment: comments,
+      });
       setShowForm(false);
-      setFormData({ student: "", behavior_score: 1, social_responsibility: 1, communication: 1, initiative: 1, teamwork: 1, comments: "" });
+      setFormData({ student: "", semester: 1, corporate_culture: 1, social_activity: 1, soft_skills: 1, discipline: 1, dormitory: 1, comments: "" });
       const data = await api.get<{ results: TutorEvaluation[] }>("/evaluations/tutor/?page_size=100");
       setEvaluations(data.results || []);
     } catch {}
@@ -92,10 +98,21 @@ export default function EvaluationsPage() {
                   required
                 />
               </div>
-              {(["behavior_score", "social_responsibility", "communication", "initiative", "teamwork"] as const).map((field) => (
+              <div>
+                <label className="mb-1 block text-sm font-medium">Semestr ID</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={formData.semester}
+                  onChange={(e) => setFormData({ ...formData, semester: Number(e.target.value) })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              {(["corporate_culture", "social_activity", "soft_skills", "discipline", "dormitory"] as const).map((field) => (
                 <div key={field}>
                   <label className="mb-1 block text-sm font-medium capitalize">
-                    {field === "behavior_score" ? "Xulq" : field === "social_responsibility" ? "Ijtimoiy mas'uliyat" : field === "communication" ? "Muloqot" : field === "initiative" ? "Tashabbuskorlik" : "Jamoaviylik"}
+                    {field === "corporate_culture" ? "Korporativ madaniyat" : field === "social_activity" ? "Ijtimoiy faollik" : field === "soft_skills" ? "Soft skills" : field === "discipline" ? "Intizom" : "Yotoqxona"}
                   </label>
                   <select
                     value={formData[field]}

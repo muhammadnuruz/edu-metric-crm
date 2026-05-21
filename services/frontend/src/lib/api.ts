@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://10.50.2.39:8080/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://api.shahzod.app/api/v1";
 
 interface TokenPair {
   access: string;
@@ -62,6 +62,7 @@ class ApiClient {
       throw new Error(error.detail || JSON.stringify(error));
     }
 
+    if (res.status === 204) return undefined as T;
     return res.json();
   }
 

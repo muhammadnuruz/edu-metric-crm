@@ -39,11 +39,12 @@ export default function FeedbackPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const user = getUserFromToken();
-  const isTeacher = user?.role === "teacher";
+  const canGiveFeedback = ["admin", "manager", "teacher", "tutor", "komendant"].includes(user?.role || "");
 
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     student: "",
+    semester: 1,
     technical_skills: "good",
     participation: "good",
     teamwork: "good",
@@ -52,7 +53,7 @@ export default function FeedbackPage() {
   });
 
   useEffect(() => {
-    api.get<{ results: MentorFeedback[] }>("/evaluations/feedback/?page_size=100")
+    api.get<{ results: MentorFeedback[] }>("/evaluations/mentor/?page_size=100")
       .then((data) => setFeedbacks(data.results || []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -61,10 +62,15 @@ export default function FeedbackPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post("/evaluations/feedback/", { ...formData, student: Number(formData.student) });
+      const { comments, ...payload } = formData;
+      await api.post("/evaluations/mentor/", {
+        ...payload,
+        student: Number(formData.student),
+        overall_comment: comments,
+      });
       setShowForm(false);
-      setFormData({ student: "", technical_skills: "good", participation: "good", teamwork: "good", initiative: "good", comments: "" });
-      const data = await api.get<{ results: MentorFeedback[] }>("/evaluations/feedback/?page_size=100");
+      setFormData({ student: "", semester: 1, technical_skills: "good", participation: "good", teamwork: "good", initiative: "good", comments: "" });
+      const data = await api.get<{ results: MentorFeedback[] }>("/evaluations/mentor/?page_size=100");
       setFeedbacks(data.results || []);
     } catch {}
   };
@@ -88,7 +94,7 @@ export default function FeedbackPage() {
           <h1 className="text-2xl font-bold">Mentor Fikrlari</h1>
           <p className="text-sm text-muted-foreground">Mentor/o&apos;qituvchi tomonidan talaba haqida fikr-mulohaza</p>
         </div>
-        {isTeacher && (
+        {canGiveFeedback && (
           <button
             onClick={() => setShowForm(!showForm)}
             className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
@@ -109,6 +115,17 @@ export default function FeedbackPage() {
                   type="number"
                   value={formData.student}
                   onChange={(e) => setFormData({ ...formData, student: e.target.value })}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Semestr ID</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={formData.semester}
+                  onChange={(e) => setFormData({ ...formData, semester: Number(e.target.value) })}
                   className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm"
                   required
                 />
