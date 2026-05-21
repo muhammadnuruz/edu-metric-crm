@@ -17,3 +17,4 @@ media/
 staticfiles/
 __pycache__/
 .idea
+.claude
