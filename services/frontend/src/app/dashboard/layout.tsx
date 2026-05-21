@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen bg-gray-50/50">
       <Sidebar role={user.role} fullName={user.fullName} />
-      <main className="ml-64 min-h-screen p-8">{children}</main>
+      <main className="md:ml-64 min-h-screen p-4 md:p-8 pt-20 md:pt-8">{children}</main>
     </div>
   );
 }

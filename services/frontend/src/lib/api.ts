@@ -88,6 +88,10 @@ class ApiClient {
     return this.get<Array<{ id: number; first_name: string; last_name: string; student_profile: Record<string, unknown> | null }>>("/auth/my-children/");
   }
 
+  async sendAdvisorMessage(message: string, student_id?: number) {
+    return this.post<{ reply: string }>("/auth/advisor/chat/", { message, student_id });
+  }
+
   async login(username: string, password: string): Promise<TokenPair> {
     const res = await fetch(`${this.baseUrl}/auth/token/`, {
       method: "POST",

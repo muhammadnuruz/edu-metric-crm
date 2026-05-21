@@ -6,6 +6,7 @@ from .views import (
     CustomTokenObtainPairView, UserViewSet, StudentProfileViewSet,
     ActivityLogViewSet, PhoneLoginView, MyChildrenView,
 )
+from .advisor_views import AdvisorChatView
 
 router = DefaultRouter()
 router.register("users", UserViewSet)
@@ -17,5 +18,6 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("phone-login/", PhoneLoginView.as_view(), name="phone_login"),
     path("my-children/", MyChildrenView.as_view(), name="my_children"),
+    path("advisor/chat/", AdvisorChatView.as_view(), name="advisor_chat"),
     path("", include(router.urls)),
 ]
