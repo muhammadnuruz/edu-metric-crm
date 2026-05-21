@@ -15,7 +15,7 @@ class ActivitySerializer(serializers.ModelSerializer):
             "rejection_reason", "max_category_score",
             "created_at", "updated_at",
         ]
-        read_only_fields = ["id", "status", "verified_by", "verified_at", "created_at", "updated_at"]
+        read_only_fields = ["id", "student", "status", "verified_by", "verified_at", "created_at", "updated_at"]
 
     def get_max_category_score(self, obj) -> float:
         return Activity.get_max_score_for_category(obj.category)

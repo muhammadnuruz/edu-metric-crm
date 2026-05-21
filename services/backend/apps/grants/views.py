@@ -125,7 +125,7 @@ class EmploymentRecordViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], permission_classes=[IsAdmin])
     def verify(self, request, pk=None):
         record = self.get_object()
-        action_type = request.data.get("action")
+        action_type = request.data.get("action", "approve")
         if action_type == "approve":
             record.status = "approved"
             record.score = request.data.get("score", record.score)

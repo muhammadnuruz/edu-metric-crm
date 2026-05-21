@@ -47,6 +47,14 @@ class IsAdminOrStaff(BasePermission):
         return request.user.is_authenticated and request.user.role in ("admin", "tutor", "komendant", "manager")
 
 
+class IsEvaluatorOrAdmin(BasePermission):
+    """Teacher, tutor, komendant can submit records; admin/manager can also submit."""
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in (
+            "admin", "manager", "teacher", "tutor", "komendant",
+        )
+
+
 class IsAdminOrTeacher(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role in ("admin", "teacher")

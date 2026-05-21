@@ -40,6 +40,9 @@ class GrantScorePublicSerializer(serializers.ModelSerializer):
 
 class EmploymentRecordSerializer(serializers.ModelSerializer):
     student_name = serializers.CharField(source="student.user.get_full_name", read_only=True)
+    bonus_score = serializers.DecimalField(source="score", max_digits=4, decimal_places=1, read_only=True)
+    verified = serializers.SerializerMethodField()
+    verified_by_name = serializers.CharField(source="verified_by.get_full_name", read_only=True, default=None)
 
     class Meta:
         model = EmploymentRecord
@@ -47,10 +50,13 @@ class EmploymentRecordSerializer(serializers.ModelSerializer):
             "id", "student", "student_name", "semester",
             "employment_type", "company_name", "position",
             "is_it_company", "start_date", "end_date",
-            "proof_url", "score", "status",
-            "verified_by", "created_at",
+            "proof_url", "score", "bonus_score", "status", "verified",
+            "verified_by", "verified_by_name", "created_at",
         ]
-        read_only_fields = ["id", "status", "verified_by", "created_at"]
+        read_only_fields = ["id", "student", "status", "verified_by", "created_at"]
+
+    def get_verified(self, obj) -> bool:
+        return obj.status == "approved"
 
 
 class GrantAllocationSerializer(serializers.ModelSerializer):
