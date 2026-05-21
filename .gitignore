@@ -16,3 +16,4 @@ out/
 media/
 staticfiles/
 __pycache__/
+.idea
