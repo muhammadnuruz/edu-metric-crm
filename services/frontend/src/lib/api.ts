@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://api.shahzod.app/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://api.shahzod.app/api/v1";
 
 interface TokenPair {
   access: string;
