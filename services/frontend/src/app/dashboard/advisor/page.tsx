@@ -22,7 +22,7 @@ export default function AdvisorPage() {
         api.getMyChildren().then(data => {
           setChildren(data);
           if (data.length > 0 && data[0].student_profile) {
-            setSelectedChildId(data[0].student_profile.student_id);
+            setSelectedChildId(data[0].student_profile.student_id as string);
           }
         });
       }
