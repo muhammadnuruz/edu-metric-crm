@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Send, User as UserIcon, BrainCircuit, Loader2 } from "lucide-react";
 import { api, getUserFromToken } from "@/lib/api";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function AdvisorPage() {
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; text: string }[]>([]);
@@ -30,8 +32,11 @@ export default function AdvisorPage() {
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const timer = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [messages, loading]);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -108,7 +113,9 @@ export default function AdvisorPage() {
                     {msg.role === "user" ? <UserIcon className="h-4 w-4 md:h-5 md:w-5" /> : <BrainCircuit className="h-4 w-4 md:h-5 md:w-5" />}
                   </div>
                   <div className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-4 py-3 md:px-5 md:py-4 ${msg.role === "user" ? "bg-primary text-primary-foreground rounded-tr-none shadow-md" : "bg-white border border-slate-100 shadow-md rounded-tl-none"}`}>
-                    <div className="whitespace-pre-wrap text-[14px] md:text-[15px] leading-relaxed break-words">{msg.text}</div>
+                    <div className="text-[14px] md:text-[15px] leading-relaxed break-words [&>p]:mb-3 [&>p:last-child]:mb-0 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-3 [&>ul:last-child]:mb-0 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-3 [&>ol:last-child]:mb-0 [&>strong]:font-bold [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>h4]:text-base [&>h4]:font-bold [&>h4]:mb-2">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               ))
