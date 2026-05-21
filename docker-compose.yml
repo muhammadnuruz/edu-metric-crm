@@ -7,8 +7,8 @@ services:
       POSTGRES_DB: grant_management
       POSTGRES_USER: grant_user
       POSTGRES_PASSWORD: grant_pass_2026
-    ports:
-      - "5434:5432"
+    # ports:
+    #   - "5434:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -19,8 +19,8 @@ services:
 
   redis:
     image: redis:7-alpine
-    ports:
-      - "6380:6379"
+    # ports:
+    #   - "6380:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
