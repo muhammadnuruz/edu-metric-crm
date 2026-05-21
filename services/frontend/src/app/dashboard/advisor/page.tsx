@@ -14,7 +14,7 @@ export default function AdvisorPage() {
   const [role, setRole] = useState<string | null>(null);
   const [children, setChildren] = useState<any[]>([]);
   const [selectedChildId, setSelectedChildId] = useState<string | undefined>(undefined);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const user = getUserFromToken();
@@ -33,8 +33,13 @@ export default function AdvisorPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-    }, 100);
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({
+          top: scrollContainerRef.current.scrollHeight,
+          behavior: "smooth"
+        });
+      }
+    }, 150);
     return () => clearTimeout(timer);
   }, [messages, loading]);
 
@@ -86,8 +91,8 @@ export default function AdvisorPage() {
       </div>
 
       <Card className="flex flex-1 flex-col overflow-hidden shadow-lg border-primary/10">
-        <CardContent className="flex flex-1 flex-col p-0">
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-[#f8fafc]">
+        <CardContent className="flex flex-1 flex-col p-0 overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-[#f8fafc]" ref={scrollContainerRef}>
             {messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center text-muted-foreground animate-in fade-in duration-700">
                 <div className="mb-6 rounded-full bg-purple-100 p-6 shadow-sm ring-8 ring-purple-50">
@@ -131,7 +136,6 @@ export default function AdvisorPage() {
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
           </div>
           
           <div className="border-t bg-white p-4">
